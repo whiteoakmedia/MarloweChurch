@@ -1,0 +1,172 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import PageHero from "@/components/PageHero";
+
+export const metadata: Metadata = {
+  title: "Kids",
+  description: "Kids Church at Marlowe AG - Where faith meets fun! Join us every Sunday for an engaging, faith-filled experience.",
+};
+
+export default function KidsPage() {
+  return (
+    <>
+      <Navbar variant="transparent" />
+      <PageHero
+        title="Where Faith Meets Fun!"
+        subtitle="A place where kids laugh, learn about Jesus, and experience His presence in a way that's exciting and unforgettable!"
+        image="/images/ben-wicks-iDCtsz-INHI-unsplash.jpg"
+      />
+
+      {/* What to Expect */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="rounded-2xl overflow-hidden shadow-xl">
+              <Image
+                src="/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg"
+                alt="Kids at Marlowe"
+                width={800}
+                height={600}
+                className="w-full h-auto object-cover"
+              />
+            </div>
+            <div>
+              <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
+                Every Sunday
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6">
+                What to Expect
+              </h2>
+              <p className="text-church-gray leading-relaxed mb-6">
+                Every Sunday, your kids will experience a safe, engaging, and Christ-centered
+                environment designed just for them! Our services include:
+              </p>
+              <div className="space-y-4">
+                {[
+                  { title: "Exciting Bible Lessons", desc: "Teaching God's Word in ways kids understand and remember." },
+                  { title: "Worship & Praise", desc: "Encouraging kids to express their love for Jesus through music." },
+                  { title: "Interactive Games & Activities", desc: "Making learning about faith fun!" },
+                  { title: "Small Groups", desc: "Building friendships and helping kids grow spiritually." },
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-church-green flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg aria-hidden="true" className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span className="font-semibold text-church-dark">{item.title}</span>
+                      <span className="text-church-gray"> &mdash; {item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Royal Rangers & Girls Ministries Cards */}
+      <section className="py-20 bg-church-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
+              Wednesday Nights
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-church-dark">
+              Midweek Programs
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Girls Ministries */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="/images/Girls-Ministries-Image.jpg"
+                  alt="Girls Ministries"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-church-dark mb-4">Girls Ministries</h3>
+                <p className="text-church-gray leading-relaxed mb-6">
+                  Girls Ministries is a church-based discipleship program that has a legacy of godly
+                  women coming alongside girls, guiding them on a path to become mature and godly
+                  women. Our goal is simple: To see every girl moving toward a deep relationship
+                  with Jesus Christ, and to realize her importance and potential in the kingdom of God.
+                </p>
+                <a
+                  href="https://marloweag.churchcenter.com/people/forms/948886"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-colors"
+                >
+                  Learn More
+                </a>
+              </div>
+            </div>
+
+            {/* Royal Rangers */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="/images/Royal-Rangers-Event.webp"
+                  alt="Royal Rangers"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-church-dark mb-4">Royal Rangers</h3>
+                <p className="text-church-gray leading-relaxed mb-6">
+                  Royal Rangers is an activity-based, small-group church ministry for boys and young
+                  men in grades K-12 with a mission to evangelize, equip and empower the next
+                  generation of Christlike men and lifelong servant leaders.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href="https://marloweag.churchcenter.com/people/forms/948916"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-colors"
+                  >
+                    Learn More
+                  </a>
+                  <a
+                    href="https://www.facebook.com/groups/328097517014117"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 border-2 border-church-green text-church-green font-medium rounded-full hover:bg-church-green hover:text-white transition-colors"
+                  >
+                    Facebook Group
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Wednesday Info */}
+          <div className="mt-12 bg-church-green rounded-2xl p-8 md:p-12 text-white text-center">
+            <h3 className="text-2xl font-bold mb-4">Every Wednesday Night</h3>
+            <p className="text-white/80 leading-relaxed max-w-3xl mx-auto">
+              Every Wednesday night from 7:00&ndash;8:30 PM, our church comes alive with midweek
+              programs designed just for kids and teens. We gather in the church fellowship hall, and
+              there&apos;s something for everyone&mdash;starting at age 3 and going all the way
+              through high school. Whether you&apos;re a member of the church or not, your family
+              is welcome to join us!
+            </p>
+            <Link
+              href="/royal-rangers-girls-ministries"
+              className="inline-block mt-6 px-8 py-3 bg-white text-church-green font-semibold rounded-full hover:bg-church-cream transition-colors"
+            >
+              Learn More About Our Programs
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
