@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import DisplayChurchEmbed from "@/components/DisplayChurchEmbed";
 import { safeFetch } from "@/lib/sanity";
-import { homePageQuery, siteSettingsQuery, ministriesQuery } from "@/sanity/queries/index";
+import { homePageQuery, siteSettingsQuery, ministriesQuery, upcomingEventsQuery } from "@/sanity/queries/index";
 import { urlFor } from "@/sanity/image";
-import type { HomePage, SiteSettings, Ministry } from "@/sanity/queries/types";
+import type { HomePage, SiteSettings, Ministry, Event } from "@/sanity/queries/types";
 
 export const revalidate = 30;
 
@@ -38,10 +37,11 @@ const fallbackMinistryCards = [
 ];
 
 export default async function Home() {
-  const [homePage, siteSettings, ministries] = await Promise.all([
+  const [homePage, siteSettings, ministries, upcomingEvents] = await Promise.all([
     safeFetch<HomePage>(homePageQuery),
     safeFetch<SiteSettings>(siteSettingsQuery),
     safeFetch<Ministry[]>(ministriesQuery),
+    safeFetch<Event[]>(upcomingEventsQuery),
   ]);
 
   // Hero fields
@@ -68,8 +68,8 @@ export default async function Home() {
         }))
       : fallbackMinistryCards;
 
-  // Display.Church widget ID (hardcoded)
-  const widgetId = "c1cc2b53-1b3c-4878-806f-e9d0b8c987c5";
+  // Top 3 upcoming events
+  const topEvents = (upcomingEvents || []).slice(0, 3);
 
   return (
     <>
@@ -300,18 +300,71 @@ export default async function Home() {
               </svg>
             </Link>
           </div>
-          <div className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
-            <DisplayChurchEmbed
-              widgetId={widgetId}
-              widgetType="card_slider"
-            />
+          {topEvents.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {topEvents.map((event) => (
+                <div
+                  key={event._id}
+                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                >
+                  {event.image?.asset ? (
+                    <div className="relative h-44 overflow-hidden">
+                      <img
+                        src={urlFor(event.image).width(600).height(300).url()}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-2 bg-church-green" />
+                  )}
+                  <div className="p-5 flex flex-col flex-1">
+                    {event.date && (
+                      <p className="text-church-green text-sm font-semibold mb-1">
+                        {new Date(event.date).toLocaleDateString("en-US", {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                        {" · "}
+                        {new Date(event.date).toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    )}
+                    <h3 className="text-lg font-bold text-church-dark mb-1">{event.title}</h3>
+                    {event.location && (
+                      <p className="text-church-gray text-sm">{event.location}</p>
+                    )}
+                    <div className="flex-1" />
+                    {event.registrationLink && (
+                      <a
+                        href={event.registrationLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-flex items-center justify-center gap-2 w-full px-4 py-2 bg-church-green text-white text-sm font-semibold rounded-xl hover:bg-church-green-dark transition-colors"
+                      >
+                        Register
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white/10 rounded-2xl p-10 text-center backdrop-blur-sm">
+              <p className="text-white/70 text-lg">No upcoming events right now. Check back soon!</p>
+            </div>
+          )}
+          <div className="mt-8 text-center sm:hidden">
+            <Link
+              href="/events"
+              className="inline-flex items-center gap-2 px-6 py-2.5 border-2 border-white/30 text-white rounded-full hover:bg-white/10 transition-colors text-sm font-medium"
+            >
+              View All Events
+            </Link>
           </div>
-          <Link
-            href="/events"
-            className="sm:hidden mt-6 inline-flex items-center gap-2 px-6 py-2.5 border-2 border-white/30 text-white rounded-full hover:bg-white/10 transition-colors text-sm font-medium"
-          >
-            View All Events
-          </Link>
         </div>
       </section>
 
