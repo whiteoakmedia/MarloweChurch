@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import Navbar from "@/components/Navbar";
-import DisplayChurchEmbed from "@/components/DisplayChurchEmbed";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -10,6 +10,11 @@ export const metadata: Metadata = {
 export default function EventsPage() {
   return (
     <>
+      <Script
+        id="dce-embeddable-script"
+        src="https://cdn.my.display.church/widgets/loader.min.js"
+        strategy="afterInteractive"
+      />
       <Navbar />
       <div className="pt-32 pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,10 +37,7 @@ export default function EventsPage() {
           </div>
 
           <div className="bg-church-cream rounded-2xl p-6 md:p-8 min-h-[500px]">
-            <DisplayChurchEmbed
-              widgetId="b05ec398-c2c3-476e-9178-aad671d87325"
-              widgetType="card_view"
-            />
+            <div className="dce-signup" id="ba4b00ac-eda9-4b3f-b758-ba9430296655" data-wt="cards" />
           </div>
         </div>
       </div>
