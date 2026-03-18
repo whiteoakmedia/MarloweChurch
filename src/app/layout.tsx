@@ -5,6 +5,10 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DisplayChurchAlerts from "@/components/DisplayChurchAlerts";
+import FeaturedEventBanner from "@/components/FeaturedEventBanner";
+import { safeFetch } from "@/lib/sanity";
+import { featuredEventsQuery } from "@/sanity/queries/index";
+import type { Event } from "@/sanity/queries/types";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -42,11 +46,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export const revalidate = 30;
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const featuredEvents = await safeFetch<Event[]>(featuredEventsQuery);
+  const featuredEvent = featuredEvents && featuredEvents.length > 0 ? featuredEvents[0] : null;
+
   return (
     <html lang="en" className={poppins.variable}>
       <head>
@@ -108,6 +117,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <DisplayChurchAlerts />
+        {featuredEvent && <FeaturedEventBanner event={featuredEvent} />}
         <main id="main-content">
           {children}
         </main>
