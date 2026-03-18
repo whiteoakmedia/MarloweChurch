@@ -1,4 +1,4 @@
-export const revalidate = 30;
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Preview",
@@ -6,9 +6,5 @@ export const metadata = {
 };
 
 export default function PreviewPage() {
-  return (
-    <div style={{ padding: "2rem", textAlign: "center", color: "#666" }}>
-      <p>Preview mode</p>
-    </div>
-  );
+  redirect("/");
 }

@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/preview",
+        source: "/:path*",
         headers: [
           {
             key: "Content-Security-Policy",
