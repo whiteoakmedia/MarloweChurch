@@ -1,26 +1,22 @@
 import { defineType, defineField } from "sanity";
 
-export default defineType({
+export const ministry = defineType({
   name: "ministry",
-  title: "Ministries",
+  title: "Ministry",
   type: "document",
   fields: [
     defineField({
       name: "name",
-      title: "Ministry Name",
+      title: "Name",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: { source: "name" },
-    }),
-    defineField({
-      name: "tagline",
-      title: "Tagline",
-      type: "string",
+      options: { source: "name", maxLength: 96 },
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: "description",
@@ -29,42 +25,46 @@ export default defineType({
       of: [{ type: "block" }],
     }),
     defineField({
+      name: "schedule",
+      title: "Schedule",
+      description: 'e.g. "Wednesdays at 7:00 PM"',
+      type: "string",
+    }),
+    defineField({
+      name: "leader",
+      title: "Leader",
+      type: "reference",
+      to: [{ type: "staff" }],
+    }),
+    defineField({
+      name: "contactEmail",
+      title: "Contact Email",
+      type: "string",
+      validation: (rule) => rule.email(),
+    }),
+    defineField({
       name: "image",
-      title: "Featured Image",
+      title: "Image",
       type: "image",
       options: { hotspot: true },
     }),
     defineField({
-      name: "schedule",
-      title: "Schedule",
-      type: "text",
-    }),
-    defineField({
-      name: "ctaText",
-      title: "CTA Button Text",
-      type: "string",
-      initialValue: "Learn More",
-    }),
-    defineField({
-      name: "ctaLink",
-      title: "CTA Link",
-      type: "url",
-    }),
-    defineField({
-      name: "facebookGroup",
-      title: "Facebook Group URL",
-      type: "url",
-    }),
-    defineField({
-      name: "category",
-      title: "Category",
-      type: "string",
-      options: {
-        list: ["kids", "youth", "adults", "outreach"],
-      },
+      name: "order",
+      title: "Order",
+      type: "number",
     }),
   ],
+  orderings: [
+    {
+      title: "Manual Order",
+      name: "orderAsc",
+      by: [{ field: "order", direction: "asc" }],
+    },
+  ],
   preview: {
-    select: { title: "name", media: "image" },
+    select: {
+      title: "name",
+      media: "image",
+    },
   },
 });

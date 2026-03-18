@@ -1,41 +1,44 @@
 import { defineType, defineField } from "sanity";
 
-export default defineType({
+export const sermon = defineType({
   name: "sermon",
-  title: "Sermons",
+  title: "Sermon",
   type: "document",
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "speaker",
-      title: "Speaker",
-      type: "string",
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      options: { source: "title", maxLength: 96 },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "preacher",
+      title: "Preacher",
+      type: "reference",
+      to: [{ type: "staff" }],
     }),
     defineField({
       name: "date",
       title: "Date",
       type: "date",
+      validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "youtubeUrl",
-      title: "YouTube Video URL",
-      type: "url",
-    }),
-    defineField({
-      name: "youtubeId",
-      title: "YouTube Video ID",
+      name: "series",
+      title: "Series Name",
       type: "string",
-      description: "The video ID from YouTube (e.g., dQw4w9WgXcQ)",
     }),
     defineField({
-      name: "thumbnail",
-      title: "Thumbnail",
-      type: "image",
+      name: "scriptureReference",
+      title: "Scripture Reference",
+      type: "string",
     }),
     defineField({
       name: "description",
@@ -44,19 +47,54 @@ export default defineType({
       of: [{ type: "block" }],
     }),
     defineField({
-      name: "series",
-      title: "Series Name",
-      type: "string",
+      name: "videoUrl",
+      title: "Video URL",
+      description: "YouTube or Vimeo embed URL",
+      type: "url",
+    }),
+    defineField({
+      name: "audioFile",
+      title: "Audio File",
+      type: "file",
+    }),
+    defineField({
+      name: "audioUrl",
+      title: "Audio URL",
+      description: "External audio URL (if not uploading a file).",
+      type: "url",
+    }),
+    defineField({
+      name: "image",
+      title: "Thumbnail",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "order",
+      title: "Order",
+      type: "number",
     }),
   ],
   orderings: [
     {
-      title: "Date (Newest)",
+      title: "Date (Newest First)",
       name: "dateDesc",
       by: [{ field: "date", direction: "desc" }],
     },
   ],
   preview: {
-    select: { title: "title", subtitle: "speaker", media: "thumbnail" },
+    select: {
+      title: "title",
+      date: "date",
+      series: "series",
+      media: "image",
+    },
+    prepare({ title, date, series, media }) {
+      return {
+        title,
+        subtitle: [series, date].filter(Boolean).join(" — "),
+        media,
+      };
+    },
   },
 });

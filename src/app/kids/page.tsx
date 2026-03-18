@@ -3,20 +3,39 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import { safeFetch } from "@/lib/sanity";
+import { PortableText } from "@portabletext/react";
+import { urlFor } from "@/sanity/image";
+import type { Ministry } from "@/sanity/queries/types";
+
+export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "Kids",
   description: "Kids Church at Marlowe AG - Where faith meets fun! Join us every Sunday for an engaging, faith-filled experience.",
 };
 
-export default function KidsPage() {
+const kidsQuery = /* groq */ '*[_type == "ministry" && slug.current == "kids"][0]{ name, description[]{ ..., markDefs[]{ ... } }, schedule, "slug": slug.current, image{ asset->{ _id, url, metadata { dimensions, lqip } }, hotspot, crop, alt } }';
+
+export default async function KidsPage() {
+  const ministry = await safeFetch<Ministry>(kidsQuery);
+
+  const heroTitle = ministry?.name || "Where Faith Meets Fun!";
+  const heroImage = ministry?.image
+    ? urlFor(ministry.image).width(1920).height(1080).url()
+    : "/images/ben-wicks-iDCtsz-INHI-unsplash.jpg";
+  const heroImageAlt = ministry?.image?.alt || "Kids at Marlowe";
+  const sectionImage = ministry?.image
+    ? urlFor(ministry.image).width(800).height(600).url()
+    : "/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg";
+
   return (
     <>
       <Navbar variant="transparent" />
       <PageHero
-        title="Where Faith Meets Fun!"
+        title={heroTitle}
         subtitle="A place where kids laugh, learn about Jesus, and experience His presence in a way that's exciting and unforgettable!"
-        image="/images/ben-wicks-iDCtsz-INHI-unsplash.jpg"
+        image={heroImage}
       />
 
       {/* What to Expect */}
@@ -25,8 +44,8 @@ export default function KidsPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg"
-                alt="Kids at Marlowe"
+                src={sectionImage}
+                alt={heroImageAlt}
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover"
@@ -34,15 +53,21 @@ export default function KidsPage() {
             </div>
             <div>
               <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-                Every Sunday
+                {ministry?.schedule || "Every Sunday"}
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6">
                 What to Expect
               </h2>
-              <p className="text-church-gray leading-relaxed mb-6">
-                Every Sunday, your kids will experience a safe, engaging, and Christ-centered
-                environment designed just for them! Our services include:
-              </p>
+              {ministry?.description ? (
+                <div className="text-church-gray leading-relaxed mb-6">
+                  <PortableText value={ministry.description} />
+                </div>
+              ) : (
+                <p className="text-church-gray leading-relaxed mb-6">
+                  Every Sunday, your kids will experience a safe, engaging, and Christ-centered
+                  environment designed just for them! Our services include:
+                </p>
+              )}
               <div className="space-y-4">
                 {[
                   { title: "Exciting Bible Lessons", desc: "Teaching God's Word in ways kids understand and remember." },

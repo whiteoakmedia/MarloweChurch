@@ -2,8 +2,75 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import DisplayChurchEmbed from "@/components/DisplayChurchEmbed";
+import { safeFetch } from "@/lib/sanity";
+import { homePageQuery, siteSettingsQuery, ministriesQuery } from "@/sanity/queries/index";
+import { urlFor } from "@/sanity/image";
+import type { HomePage, SiteSettings, Ministry } from "@/sanity/queries/types";
 
-export default function Home() {
+export const revalidate = 30;
+
+// ---------------------------------------------------------------------------
+// Fallback data (used when Sanity is not connected or returns null)
+// ---------------------------------------------------------------------------
+
+const fallbackMinistryCards = [
+  {
+    title: "Kids",
+    description:
+      "Join us every Sunday at 9:00 am or 11:00 am in the fellowship hall for a fun, engaging, and faith-filled experience!",
+    image: "/images/ben-wicks-iDCtsz-INHI-unsplash.jpg",
+    href: "/kids",
+  },
+  {
+    title: "Youth",
+    description:
+      "Foundation Youth is all about creating a welcoming and encouraging space where students can discover their purpose.",
+    image: "/images/Final-Stretch-for-New-Website.jpeg",
+    href: "/youth",
+  },
+  {
+    title: "Plan Your Visit",
+    description:
+      "We know visiting a new church can feel overwhelming, but we're here to make it easy! Come as you are.",
+    image: "/images/Image-from-Bulk-Resize-Photos.jpg",
+    href: "/im-new",
+  },
+];
+
+export default async function Home() {
+  const [homePage, siteSettings, ministries] = await Promise.all([
+    safeFetch<HomePage>(homePageQuery),
+    safeFetch<SiteSettings>(siteSettingsQuery),
+    safeFetch<Ministry[]>(ministriesQuery),
+  ]);
+
+  // Hero fields
+  const heroHeading = homePage?.heroHeading ?? "Love God, Love People,";
+  const heroSubtext = homePage?.heroSubheading ?? "New here? We'd love to meet you.";
+
+  // About / welcome section
+  const aboutHeading =
+    homePage?.welcomeHeading ??
+    "We are an Assemblies of God Church located in Marlowe, WV.";
+  const aboutText =
+    homePage?.welcomeBody
+      ? null // will render via PortableText if available
+      : "At Marlowe Church, we are passionate about encountering God, growing in faith, and serving our community with love. Whether you're exploring faith for the first time or looking for a church to call home, you'll find a welcoming family here. Our mission is to share the hope of Jesus, build authentic relationships, and equip people to live out their faith in everyday life.";
+
+  // Ministry cards — prefer ministries collection from Sanity, then fallback
+  const ministryCards =
+    ministries && ministries.length > 0
+      ? ministries.slice(0, 3).map((m) => ({
+          title: m.name,
+          description: "",
+          image: m.image?.asset ? urlFor(m.image).width(600).height(400).url() : "",
+          href: m.slug ? `/${m.slug}` : "#",
+        }))
+      : fallbackMinistryCards;
+
+  // Display.Church widget ID (hardcoded)
+  const widgetId = "c1cc2b53-1b3c-4878-806f-e9d0b8c987c5";
+
   return (
     <>
       <Navbar variant="transparent" />
@@ -20,12 +87,20 @@ export default function Home() {
         <div className="hero-overlay absolute inset-0" />
         <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto animate-fade-in-up">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-5 drop-shadow-lg">
-            Love God, Love People,
-            <br />
-            <span className="text-church-blue-bright">Live with Purpose</span>
+            {heroHeading.includes(",") ? (
+              <>
+                {heroHeading.split(",").slice(0, -1).join(",")},
+                <br />
+                <span className="text-church-blue-bright">
+                  {heroHeading.split(",").slice(-1)[0].trim()}
+                </span>
+              </>
+            ) : (
+              heroHeading
+            )}
           </h1>
           <p className="text-base md:text-lg font-light mb-6 text-white/90">
-            New here? We&apos;d love to meet you.
+            {heroSubtext}
           </p>
           <Link
             href="/im-new"
@@ -56,14 +131,10 @@ export default function Home() {
                 Welcome Home
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6 leading-tight">
-                We are an Assemblies of God Church located in Marlowe, WV.
+                {aboutHeading}
               </h2>
               <p className="text-church-gray leading-relaxed mb-8">
-                At Marlowe Church, we are passionate about encountering God, growing in faith, and
-                serving our community with love. Whether you&apos;re exploring faith for the first
-                time or looking for a church to call home, you&apos;ll find a welcoming family here.
-                Our mission is to share the hope of Jesus, build authentic relationships, and equip
-                people to live out their faith in everyday life.
+                {aboutText}
               </p>
               <Link
                 href="/our-leadership"
@@ -176,29 +247,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Kids",
-                description:
-                  "Join us every Sunday at 9:00 am or 11:00 am in the fellowship hall for a fun, engaging, and faith-filled experience!",
-                image: "/images/ben-wicks-iDCtsz-INHI-unsplash.jpg",
-                href: "/kids",
-              },
-              {
-                title: "Youth",
-                description:
-                  "Foundation Youth is all about creating a welcoming and encouraging space where students can discover their purpose.",
-                image: "/images/Final-Stretch-for-New-Website.jpeg",
-                href: "/youth",
-              },
-              {
-                title: "Plan Your Visit",
-                description:
-                  "We know visiting a new church can feel overwhelming, but we're here to make it easy! Come as you are.",
-                image: "/images/Image-from-Bulk-Resize-Photos.jpg",
-                href: "/im-new",
-              },
-            ].map((card) => (
+            {ministryCards.map((card) => (
               <Link
                 key={card.title}
                 href={card.href}
@@ -221,7 +270,7 @@ export default function Home() {
                     {card.description}
                   </p>
                   <span className="inline-flex items-center gap-2 text-church-green font-semibold text-sm group-hover:gap-3 transition-all">
-                    Learn More
+                    {"Learn More"}
                     <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
@@ -253,7 +302,7 @@ export default function Home() {
           </div>
           <div className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
             <DisplayChurchEmbed
-              widgetId="c1cc2b53-1b3c-4878-806f-e9d0b8c987c5"
+              widgetId={widgetId}
               widgetType="card_slider"
             />
           </div>

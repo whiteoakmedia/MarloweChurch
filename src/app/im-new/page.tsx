@@ -3,18 +3,32 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import { safeFetch } from "@/lib/sanity";
+import { siteSettingsQuery, aboutPageQuery } from "@/sanity/queries/index";
+import { PortableText } from "@portabletext/react";
+import { urlFor } from "@/sanity/image";
+import type { SiteSettings, AboutPage } from "@/sanity/queries/types";
+
+export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "I'm New",
   description: "New to Marlowe Assembly of God? We'd love to meet you! Plan your visit today.",
 };
 
-export default function ImNewPage() {
+export default async function ImNewPage() {
+  const [siteSettings, aboutPage] = await Promise.all([
+    safeFetch<SiteSettings>(siteSettingsQuery),
+    safeFetch<AboutPage>(aboutPageQuery),
+  ]);
+
+  const churchName = siteSettings?.churchName || "Marlowe AG";
+
   return (
     <>
       <Navbar variant="transparent" />
       <PageHero
-        title="We are so glad you're here!"
+        title={siteSettings?.tagline || "We are so glad you're here!"}
         subtitle="Whether you're exploring faith or looking for a church to call home, you belong here."
         image="/images/Image-from-Bulk-Resize-Photos.jpg"
         ctaText="I'm New"
@@ -30,18 +44,24 @@ export default function ImNewPage() {
                 About Us
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6">
-                About Marlowe AG
+                About {churchName}
               </h2>
-              <p className="text-church-gray leading-relaxed">
-                At Marlowe Church, we are passionate about encountering God, growing in faith, and
-                serving our community with love. Whether you&apos;re exploring faith for the first
-                time or looking for a church to call home, you&apos;ll find a welcoming family here.
-                Our mission is to share the hope of Jesus, build authentic relationships, and equip
-                people to live out their faith in everyday life. No matter where you are in your
-                journey, there&apos;s a place for you at Marlowe. Join us and experience a church
-                where faith is real, community is strong, and lives are transformed. We can&apos;t
-                wait to meet you!
-              </p>
+              {aboutPage?.whoWeAreBody ? (
+                <div className="text-church-gray leading-relaxed">
+                  <PortableText value={aboutPage.whoWeAreBody} />
+                </div>
+              ) : (
+                <p className="text-church-gray leading-relaxed">
+                  At Marlowe Church, we are passionate about encountering God, growing in faith, and
+                  serving our community with love. Whether you&apos;re exploring faith for the first
+                  time or looking for a church to call home, you&apos;ll find a welcoming family here.
+                  Our mission is to share the hope of Jesus, build authentic relationships, and equip
+                  people to live out their faith in everyday life. No matter where you are in your
+                  journey, there&apos;s a place for you at Marlowe. Join us and experience a church
+                  where faith is real, community is strong, and lives are transformed. We can&apos;t
+                  wait to meet you!
+                </p>
+              )}
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl">
               <Image

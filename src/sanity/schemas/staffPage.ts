@@ -1,8 +1,8 @@
 import { defineType, defineField } from "sanity";
 
-export const eventsPage = defineType({
-  name: "eventsPage",
-  title: "Events Page",
+export const staffPage = defineType({
+  name: "staffPage",
+  title: "Staff Page",
   type: "document",
   groups: [
     { name: "hero", title: "Hero", default: true },
@@ -59,7 +59,7 @@ export const eventsPage = defineType({
   ],
   preview: {
     prepare() {
-      return { title: "Events Page" };
+      return { title: "Staff Page" };
     },
   },
 });

@@ -2,20 +2,38 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import { safeFetch } from "@/lib/sanity";
+import { PortableText } from "@portabletext/react";
+import { urlFor } from "@/sanity/image";
+import type { Ministry } from "@/sanity/queries/types";
+
+export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "Youth",
   description: "Foundation Youth at Marlowe AG - A vibrant community where students grow in faith and discover their purpose.",
 };
 
-export default function YouthPage() {
+const youthQuery = /* groq */ '*[_type == "ministry" && slug.current == "youth"][0]{ name, description[]{ ..., markDefs[]{ ... } }, schedule, "slug": slug.current, image{ asset->{ _id, url, metadata { dimensions, lqip } }, hotspot, crop, alt } }';
+
+export default async function YouthPage() {
+  const ministry = await safeFetch<Ministry>(youthQuery);
+
+  const heroTitle = ministry?.name || "Foundation Youth";
+  const heroImage = ministry?.image
+    ? urlFor(ministry.image).width(1920).height(1080).url()
+    : "/images/Final-Stretch-Website-Image-2.jpeg";
+  const sectionImage = ministry?.image
+    ? urlFor(ministry.image).width(800).height(600).url()
+    : "/images/Final-Stretch-Website-Image-2.jpeg";
+
   return (
     <>
       <Navbar variant="transparent" />
       <PageHero
-        title="Foundation Youth"
+        title={heroTitle}
         subtitle="A vibrant community where students grow in faith, build friendships, and discover their God-given purpose."
-        image="/images/Final-Stretch-Website-Image-2.jpeg"
+        image={heroImage}
         ctaText="Learn More"
         ctaHref="https://marloweag.churchcenter.com/people/forms/948961"
       />
@@ -29,25 +47,33 @@ export default function YouthPage() {
                 Students
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6">
-                About Foundation Youth
+                About {heroTitle}
               </h2>
-              <p className="text-church-gray leading-relaxed mb-6">
-                Foundation Youth is a vibrant and welcoming community where students can grow in
-                their faith, build meaningful friendships, and discover their God-given purpose.
-                Through engaging discussions, worship, and fun activities, we create an environment
-                where students feel seen, valued, and encouraged in their spiritual journey.
-              </p>
-              <p className="text-church-gray leading-relaxed">
-                Each gathering is an opportunity to connect with others, explore biblical truths, and
-                strengthen your relationship with Christ in a supportive and energetic setting.
-                Whether you&apos;re new to faith or looking to deepen your walk with God, Foundation
-                Youth is a place for you!
-              </p>
+              {ministry?.description ? (
+                <div className="text-church-gray leading-relaxed mb-6">
+                  <PortableText value={ministry.description} />
+                </div>
+              ) : (
+                <>
+                  <p className="text-church-gray leading-relaxed mb-6">
+                    Foundation Youth is a vibrant and welcoming community where students can grow in
+                    their faith, build meaningful friendships, and discover their God-given purpose.
+                    Through engaging discussions, worship, and fun activities, we create an environment
+                    where students feel seen, valued, and encouraged in their spiritual journey.
+                  </p>
+                  <p className="text-church-gray leading-relaxed">
+                    Each gathering is an opportunity to connect with others, explore biblical truths, and
+                    strengthen your relationship with Christ in a supportive and energetic setting.
+                    Whether you&apos;re new to faith or looking to deepen your walk with God, Foundation
+                    Youth is a place for you!
+                  </p>
+                </>
+              )}
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="/images/Final-Stretch-Website-Image-2.jpeg"
-                alt="Foundation Youth"
+                src={sectionImage}
+                alt={ministry?.image?.alt || "Foundation Youth"}
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover"

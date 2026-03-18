@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import Navbar from "@/components/Navbar";
+import { safeFetch } from "@/lib/sanity";
+import { eventsPageQuery, eventsQuery } from "@/sanity/queries/index";
+import type { EventsPage as EventsPageData, Event } from "@/sanity/queries/types";
+
+export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "Events",
   description: "Upcoming events at Marlowe Assembly of God. Stay connected with what's happening.",
 };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const eventsPage = await safeFetch<EventsPageData>(eventsPageQuery);
+  const events = await safeFetch<Event[]>(eventsQuery);
+
+  const heading = eventsPage?.heroHeading || "Events";
+
   return (
     <>
       <Script
@@ -22,9 +32,9 @@ export default function EventsPage() {
             <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
               What&apos;s Happening
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-church-dark mb-4">Events</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-church-dark mb-4">{heading}</h1>
             <a
-              href="https://marlowe-assembly-of-god-486395.churchcenter.com/calendar?view=month"
+              href={eventsPage?.ctaButtonLink || "https://marlowe-assembly-of-god-486395.churchcenter.com/calendar?view=month"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-church-green hover:text-church-green-dark font-medium transition-colors"
@@ -36,6 +46,37 @@ export default function EventsPage() {
             </a>
           </div>
 
+          {/* Sanity Events Grid */}
+          {events && events.length > 0 && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {events.map((event) => (
+                <div
+                  key={event._id}
+                  className="bg-church-cream rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <h3 className="text-xl font-bold text-church-dark mb-2">{event.title}</h3>
+                  {event.date && (
+                    <p className="text-church-green font-medium text-sm mb-1">
+                      {new Date(event.date).toLocaleDateString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                  )}
+                  {event.timeDisplay && (
+                    <p className="text-church-gray text-sm mb-1">{event.timeDisplay}</p>
+                  )}
+                  {event.location && (
+                    <p className="text-church-gray text-sm">{event.location}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Display.Church Widget */}
           <div className="bg-church-cream rounded-2xl p-6 md:p-8 min-h-[500px]">
             <div className="dce-signup" id="ba4b00ac-eda9-4b3f-b758-ba9430296655" data-wt="cards" />
           </div>

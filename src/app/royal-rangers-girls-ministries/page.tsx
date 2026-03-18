@@ -2,19 +2,42 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import { safeFetch } from "@/lib/sanity";
+import { PortableText } from "@portabletext/react";
+import { urlFor } from "@/sanity/image";
+import type { Ministry } from "@/sanity/queries/types";
+
+export const revalidate = 30;
 
 export const metadata: Metadata = {
   title: "Royal Rangers & Girls Ministries",
   description:
-    "Royal Rangers and Girls Ministries at Marlowe Assembly of God — discipleship programs for kids K-12 every Wednesday night from 7:00–8:30 PM.",
+    "Royal Rangers and Girls Ministries at Marlowe Assembly of God — discipleship programs for kids K-12 every Wednesday night from 7:00-8:30 PM.",
 };
 
-export default function RoyalRangersGirlsMinistriesPage() {
+const rangersQuery = /* groq */ '*[_type == "ministry" && slug.current == "royal-rangers"][0]{ name, description[]{ ..., markDefs[]{ ... } }, schedule, "slug": slug.current, image{ asset->{ _id, url, metadata { dimensions, lqip } }, hotspot, crop, alt } }';
+const girlsQuery = /* groq */ '*[_type == "ministry" && slug.current == "girls-ministries"][0]{ name, description[]{ ..., markDefs[]{ ... } }, schedule, "slug": slug.current, image{ asset->{ _id, url, metadata { dimensions, lqip } }, hotspot, crop, alt } }';
+
+export default async function RoyalRangersGirlsMinistriesPage() {
+  const [rangers, girls] = await Promise.all([
+    safeFetch<Ministry>(rangersQuery),
+    safeFetch<Ministry>(girlsQuery),
+  ]);
+
+  const rangersName = rangers?.name || "Royal Rangers";
+  const girlsName = girls?.name || "Girls Ministries";
+  const rangersImage = rangers?.image
+    ? urlFor(rangers.image).width(800).height(600).url()
+    : "/images/Royal-Rangers-Event.webp";
+  const girlsImage = girls?.image
+    ? urlFor(girls.image).width(800).height(600).url()
+    : "/images/Girls-Ministries-Image.jpg";
+
   return (
     <>
       <Navbar variant="transparent" />
       <PageHero
-        title="Royal Rangers & Girls Ministries"
+        title={`${rangersName} & ${girlsName}`}
         subtitle="Building the next generation of Christlike leaders — every Wednesday night at Marlowe Assembly of God."
         image="/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg"
       />
@@ -25,8 +48,8 @@ export default function RoyalRangersGirlsMinistriesPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="rounded-2xl overflow-hidden shadow-xl">
               <Image
-                src="/images/Royal-Rangers-Event.webp"
-                alt="Royal Rangers Event"
+                src={rangersImage}
+                alt={rangers?.image?.alt || "Royal Rangers Event"}
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover"
@@ -37,13 +60,19 @@ export default function RoyalRangersGirlsMinistriesPage() {
                 Boys K-12
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6">
-                Royal Rangers
+                {rangersName}
               </h2>
-              <p className="text-church-gray leading-relaxed mb-6">
-                Royal Rangers is a mentoring and discipleship program for boys in Kindergarten
-                through 12th grade. Through adventure, character development, and fellowship, we
-                help young men grow in faith and become Christlike leaders.
-              </p>
+              {rangers?.description ? (
+                <div className="text-church-gray leading-relaxed mb-6">
+                  <PortableText value={rangers.description} />
+                </div>
+              ) : (
+                <p className="text-church-gray leading-relaxed mb-6">
+                  Royal Rangers is a mentoring and discipleship program for boys in Kindergarten
+                  through 12th grade. Through adventure, character development, and fellowship, we
+                  help young men grow in faith and become Christlike leaders.
+                </p>
+              )}
               <h3 className="text-lg font-bold text-church-dark mb-4">What Boys Experience:</h3>
               <div className="space-y-3 mb-8">
                 {[
@@ -95,15 +124,21 @@ export default function RoyalRangersGirlsMinistriesPage() {
                 Girls K-12
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6">
-                Girls Ministries
+                {girlsName}
               </h2>
-              <p className="text-church-gray leading-relaxed mb-6">
-                Girls Ministries is a discipleship program that empowers girls in Kindergarten
-                through 12th grade to grow in their faith, build lasting friendships, and discover
-                their God-given purpose. Our goal is simple: to see every girl moving toward a deep
-                relationship with Jesus Christ, and to realize her importance and potential in the
-                kingdom of God.
-              </p>
+              {girls?.description ? (
+                <div className="text-church-gray leading-relaxed mb-6">
+                  <PortableText value={girls.description} />
+                </div>
+              ) : (
+                <p className="text-church-gray leading-relaxed mb-6">
+                  Girls Ministries is a discipleship program that empowers girls in Kindergarten
+                  through 12th grade to grow in their faith, build lasting friendships, and discover
+                  their God-given purpose. Our goal is simple: to see every girl moving toward a deep
+                  relationship with Jesus Christ, and to realize her importance and potential in the
+                  kingdom of God.
+                </p>
+              )}
               <h3 className="text-lg font-bold text-church-dark mb-4">What Girls Experience:</h3>
               <div className="space-y-3 mb-8">
                 {[
@@ -135,8 +170,8 @@ export default function RoyalRangersGirlsMinistriesPage() {
             </div>
             <div className="rounded-2xl overflow-hidden shadow-xl order-1 md:order-2">
               <Image
-                src="/images/Girls-Ministries-Image.jpg"
-                alt="Girls Ministries"
+                src={girlsImage}
+                alt={girls?.image?.alt || "Girls Ministries"}
                 width={800}
                 height={600}
                 className="w-full h-auto object-cover"

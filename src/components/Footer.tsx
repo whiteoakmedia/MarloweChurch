@@ -9,6 +9,7 @@ const footerLinks = [
   { href: "/our-beliefs", label: "Our Beliefs" },
   { href: "/events", label: "Events" },
   { href: "/royal-rangers-girls-ministries", label: "Royal Rangers & Girls Ministries" },
+  { href: "/contact", label: "Contact Us" },
 ];
 
 export default function Footer() {
