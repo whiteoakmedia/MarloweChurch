@@ -11,6 +11,18 @@
   --color-church-cream: #faf8f2;
   --color-church-dark: #1a1a2e;
   --color-church-gray: #4a5568;
+  /* Preview client generic aliases */
+  --color-primary: #2d5a27;
+  --color-accent: #2e7ab8;
+  --color-bg: #faf8f2;
+  --color-bg-alt: #f0ede4;
+  --color-text: #1a1a2e;
+  --color-text-muted: #4a5568;
+  --color-text-light: #718096;
+  --color-text-secondary: #4a5568;
+  --color-border: #e2e0d8;
+  --color-border-light: #f0ede4;
+  --color-white: #ffffff;
   --font-heading: "Poppins", sans-serif;
   --font-body: "Poppins", sans-serif;
 }
@@ -28,10 +40,98 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
 }
 
-/* Display.church widget styles */
-.dce-calendar {
+/* ============================================
+   Preview Client Utility Classes
+   ============================================ */
+.section-padding {
+  padding-left: clamp(1.5rem, 5vw, 6rem);
+  padding-right: clamp(1.5rem, 5vw, 6rem);
+}
+.section-padding-y {
+  padding-top: clamp(3rem, 8vw, 7rem);
+  padding-bottom: clamp(3rem, 8vw, 7rem);
+}
+.container-wide {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
-  min-height: 400px;
+}
+.heading-xl {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.heading-lg {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.heading-md {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 600;
+}
+.heading-sm {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 600;
+}
+.body-lg {
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+  line-height: 1.7;
+}
+.accent-underline {
+  position: relative;
+  display: block;
+}
+.accent-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary {
+  background-color: var(--color-accent);
+  color: white;
+}
+.btn-primary:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+}
+.btn-outline:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+.btn-outline-light {
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  background: transparent;
+}
+.btn-outline-light:hover {
+  background-color: white;
+  color: var(--color-primary);
 }
 
 /* Smooth fade-in animations */
