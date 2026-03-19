@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import FeaturedEventBanner from "@/components/FeaturedEventBanner";
 import { safeFetch } from "@/lib/sanity";
-import { homePageQuery, siteSettingsQuery, ministriesQuery, upcomingEventsQuery } from "@/sanity/queries/index";
+import { homePageQuery, siteSettingsQuery, ministriesQuery, upcomingEventsQuery, featuredEventsQuery } from "@/sanity/queries/index";
 import { urlFor } from "@/sanity/image";
 import type { HomePage, SiteSettings, Ministry, Event } from "@/sanity/queries/types";
 
@@ -37,12 +38,14 @@ const fallbackMinistryCards = [
 ];
 
 export default async function Home() {
-  const [homePage, siteSettings, ministries, upcomingEvents] = await Promise.all([
+  const [homePage, siteSettings, ministries, upcomingEvents, featuredEvents] = await Promise.all([
     safeFetch<HomePage>(homePageQuery),
     safeFetch<SiteSettings>(siteSettingsQuery),
     safeFetch<Ministry[]>(ministriesQuery),
     safeFetch<Event[]>(upcomingEventsQuery),
+    safeFetch<Event[]>(featuredEventsQuery),
   ]);
+  const featuredEvent = featuredEvents && featuredEvents.length > 0 ? featuredEvents[0] : null;
 
   // Hero fields
   const heroHeading = homePage?.heroHeading ?? "Love God, Love People,";
@@ -74,6 +77,7 @@ export default async function Home() {
   return (
     <>
       <Navbar variant="transparent" />
+      {featuredEvent && <FeaturedEventBanner event={featuredEvent} />}
 
       {/* Hero Section */}
       <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">

@@ -23,7 +23,7 @@ function formatTime(dateStr: string) {
 
 export default function FeaturedEventBanner({ event }: FeaturedEventBannerProps) {
   return (
-    <div className="relative bg-church-green overflow-hidden">
+    <div className="relative bg-church-green overflow-hidden mt-20 z-40">
       {/* Background image if available */}
       {event.image?.asset && (
         <div className="absolute inset-0">
