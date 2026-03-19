@@ -193,7 +193,7 @@ export const eventsQuery = /* groq */ `
 `;
 
 export const upcomingEventsQuery = /* groq */ `
-  *[_type == "event" && date >= now()] | order(date asc)[0...6]{
+  *[_type == "event" && date >= now()] | order(featured desc, date asc){
     ${eventProjection}
   }
 `;
