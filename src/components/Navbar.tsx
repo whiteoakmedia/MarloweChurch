@@ -17,7 +17,7 @@ const navLinks = [
 interface FeaturedEventData {
   title: string;
   date?: string;
-  registrationLink?: string;
+  registrationLink?: string | null;
   slug?: string;
 }
 
