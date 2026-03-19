@@ -14,13 +14,37 @@ const navLinks = [
   { href: "/events", label: "Events" },
 ];
 
-interface NavbarProps {
-  variant?: "transparent" | "solid";
+interface FeaturedEventData {
+  title: string;
+  date?: string;
+  registrationLink?: string;
+  slug?: string;
 }
 
-export default function Navbar({ variant = "solid" }: NavbarProps) {
+interface NavbarProps {
+  variant?: "transparent" | "solid";
+  featuredEvent?: FeaturedEventData | null;
+}
+
+function formatBannerDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function formatBannerTime(dateStr: string) {
+  return new Date(dateStr).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+export default function Navbar({ variant = "solid", featuredEvent }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(false);
   const pathname = usePathname();
 
   const isTransparent = variant === "transparent" && !scrolled;
@@ -33,6 +57,16 @@ export default function Navbar({ variant = "solid" }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [variant]);
 
+  // Animate banner in on mount
+  useEffect(() => {
+    if (featuredEvent) {
+      const timer = setTimeout(() => setBannerVisible(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [featuredEvent]);
+
+  const bannerLink = featuredEvent?.registrationLink || (featuredEvent?.slug ? `/events/${featuredEvent.slug}` : null);
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -41,21 +75,52 @@ export default function Navbar({ variant = "solid" }: NavbarProps) {
           : "glass-nav shadow-md"
       }`}
     >
-      {/* Service Times Banner */}
-      <div className="bg-church-green text-white text-center py-1.5 text-sm font-light tracking-wide">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-center gap-4 flex-wrap">
-          <span>Services on Sundays at 9am, 11am</span>
-          <span className="hidden sm:inline text-white/40">|</span>
-          <a
-            href="https://www.youtube.com/@marloweassemblyofgod523/streams"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline underline-offset-2 hover:text-church-blue transition-colors"
-          >
-            Watch our live stream
-          </a>
+      {/* Featured Event Banner — slides down on load */}
+      {featuredEvent && (
+        <div
+          className="bg-church-green text-white overflow-hidden transition-all duration-500 ease-out"
+          style={{
+            maxHeight: bannerVisible ? "60px" : "0",
+            opacity: bannerVisible ? 1 : 0,
+          }}
+        >
+          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0 text-sm">
+              <span className="font-bold truncate">{featuredEvent.title}</span>
+              {featuredEvent.date && (
+                <span className="text-white/80 whitespace-nowrap hidden sm:inline">
+                  {formatBannerDate(featuredEvent.date)} at {formatBannerTime(featuredEvent.date)}
+                </span>
+              )}
+            </div>
+            {bannerLink && (
+              featuredEvent.registrationLink ? (
+                <a
+                  href={bannerLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white text-church-green text-xs font-semibold rounded-full hover:bg-white/90 transition-colors whitespace-nowrap flex-shrink-0"
+                >
+                  Register
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              ) : (
+                <Link
+                  href={bannerLink}
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white text-church-green text-xs font-semibold rounded-full hover:bg-white/90 transition-colors whitespace-nowrap flex-shrink-0"
+                >
+                  Learn More
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
+              )
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <nav aria-label="Main navigation" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">

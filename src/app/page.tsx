@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import FeaturedEventBanner from "@/components/FeaturedEventBanner";
 import { safeFetch } from "@/lib/sanity";
 import { homePageQuery, siteSettingsQuery, ministriesQuery, upcomingEventsQuery, featuredEventsQuery } from "@/sanity/queries/index";
 import { urlFor } from "@/sanity/image";
@@ -76,8 +75,7 @@ export default async function Home() {
 
   return (
     <>
-      <Navbar variant="transparent" />
-      {featuredEvent && <FeaturedEventBanner event={featuredEvent} />}
+      <Navbar variant="transparent" featuredEvent={featuredEvent} />
 
       {/* Hero Section */}
       <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
