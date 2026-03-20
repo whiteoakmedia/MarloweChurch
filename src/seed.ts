@@ -209,10 +209,6 @@ export async function seed(payload: Payload) {
   console.log('Seeding staff...')
   for (const member of staffMembers) {
     try {
-      const photoId = member.photoUrl
-        ? await uploadImage(payload, member.photoUrl, member.name)
-        : null
-
       await payload.create({
         collection: 'staff',
         data: {
@@ -222,7 +218,7 @@ export async function seed(payload: Payload) {
           email: member.email || undefined,
           order: member.order,
           bio: htmlToLexical(member.bio),
-          ...(photoId ? { photo: photoId } : {}),
+          photoUrl: member.photoUrl || undefined,
         },
       })
       console.log(`  \u2713 ${member.name}`)
@@ -235,10 +231,6 @@ export async function seed(payload: Payload) {
   console.log('Seeding ministries...')
   for (const ministry of ministries) {
     try {
-      const imageId = ministry.imageUrl
-        ? await uploadImage(payload, ministry.imageUrl, ministry.name)
-        : null
-
       await payload.create({
         collection: 'ministries',
         data: {
@@ -247,7 +239,7 @@ export async function seed(payload: Payload) {
           schedule: ministry.schedule,
           order: ministry.order,
           description: htmlToLexical(ministry.description),
-          ...(imageId ? { image: imageId } : {}),
+          imageUrl: ministry.imageUrl || undefined,
         },
       })
       console.log(`  \u2713 ${ministry.name}`)

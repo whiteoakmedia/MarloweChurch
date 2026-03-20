@@ -60,7 +60,14 @@ export const Staff: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'A professional headshot or photo.',
+        description: 'A professional headshot or photo (uploaded).',
+      },
+    },
+    {
+      name: 'photoUrl',
+      type: 'text',
+      admin: {
+        description: 'External photo URL (used if no uploaded photo). Paste a direct image link.',
       },
     },
     {

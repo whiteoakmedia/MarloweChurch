@@ -23,12 +23,8 @@ export default async function RoyalRangersGirlsMinistriesPage() {
 
   const rangersName = rangers?.name || "Royal Rangers";
   const girlsName = girls?.name || "Girls Ministries";
-  const rangersImage = (typeof rangers?.image === 'object' && rangers?.image?.url)
-    ? rangers.image.url
-    : "/images/Royal-Rangers-Event.webp";
-  const girlsImage = (typeof girls?.image === 'object' && girls?.image?.url)
-    ? girls.image.url
-    : "/images/Girls-Ministries-Image.jpg";
+  const rangersImage = (typeof rangers?.image === 'object' && rangers?.image?.url) ? rangers.image.url : (rangers?.imageUrl || "/images/Royal-Rangers-Event.webp");
+  const girlsImage = (typeof girls?.image === 'object' && girls?.image?.url) ? girls.image.url : (girls?.imageUrl || "/images/Girls-Ministries-Image.jpg");
 
   return (
     <>

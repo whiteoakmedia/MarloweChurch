@@ -17,12 +17,9 @@ export default async function YouthPage() {
   const pageContent = await getPageGlobal('youth-page') as Record<string, any> | null;
 
   const heroTitle = ministry?.name || "Foundation Youth";
-  const heroImage = (typeof ministry?.image === 'object' && ministry?.image?.url)
-    ? ministry.image.url
-    : "/images/Final-Stretch-Website-Image-2.jpeg";
-  const sectionImage = (typeof ministry?.image === 'object' && ministry?.image?.url)
-    ? ministry.image.url
-    : "/images/Final-Stretch-Website-Image-2.jpeg";
+  const resolvedImage = (typeof ministry?.image === 'object' && ministry?.image?.url) ? ministry.image.url : (ministry?.imageUrl || null);
+  const heroImage = resolvedImage || "/images/Final-Stretch-Website-Image-2.jpeg";
+  const sectionImage = resolvedImage || "/images/Final-Stretch-Website-Image-2.jpeg";
 
   return (
     <>

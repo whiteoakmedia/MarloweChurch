@@ -53,7 +53,14 @@ export const Ministries: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'A photo representing this ministry.',
+        description: 'A photo representing this ministry (uploaded).',
+      },
+    },
+    {
+      name: 'imageUrl',
+      type: 'text',
+      admin: {
+        description: 'External image URL (used if no uploaded image).',
       },
     },
     {

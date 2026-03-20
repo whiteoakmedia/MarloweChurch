@@ -89,7 +89,7 @@ export default async function Home() {
       ? ministries.slice(0, 3).map((m: any) => ({
           title: m.name,
           description: "",
-          image: (typeof m.image === 'object' && m.image?.url) ? m.image.url : "/images/Image-from-Bulk-Resize-Photos.jpg",
+          image: (typeof m.image === 'object' && m.image?.url) ? m.image.url : (m.imageUrl || "/images/Image-from-Bulk-Resize-Photos.jpg"),
           href: m.slug ? `/${m.slug}` : "#",
         }))
       : fallbackMinistryCards;

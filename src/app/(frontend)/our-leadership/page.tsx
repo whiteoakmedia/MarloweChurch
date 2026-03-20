@@ -76,9 +76,9 @@ export default async function OurLeadershipPage() {
               >
                 <div className="grid md:grid-cols-2 gap-0">
                   <div className="relative h-80 md:h-auto">
-                    {(typeof leader.photo === 'object' && leader.photo?.url) ? (
+                    {((typeof leader.photo === 'object' && leader.photo?.url) || leader.photoUrl) ? (
                       <Image
-                        src={typeof leader.photo === 'object' ? leader.photo.url : ""}
+                        src={(typeof leader.photo === 'object' && leader.photo?.url) ? leader.photo.url : leader.photoUrl}
                         alt={leader.name}
                         fill
                         className="object-cover"
@@ -157,9 +157,9 @@ export default async function OurLeadershipPage() {
               >
                 <div className="grid md:grid-cols-2 gap-0">
                   <div className="relative h-80 md:h-auto md:min-h-[400px]">
-                    {(typeof member.photo === 'object' && member.photo?.url) ? (
+                    {((typeof member.photo === 'object' && member.photo?.url) || member.photoUrl) ? (
                       <Image
-                        src={typeof member.photo === 'object' ? member.photo.url : ""}
+                        src={(typeof member.photo === 'object' && member.photo?.url) ? member.photo.url : member.photoUrl}
                         alt={member.name}
                         fill
                         className="object-cover"

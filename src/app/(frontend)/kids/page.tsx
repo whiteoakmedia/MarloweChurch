@@ -18,13 +18,10 @@ export default async function KidsPage() {
   const pageContent = await getPageGlobal('kids-page') as Record<string, any> | null;
 
   const heroTitle = ministry?.name || "Where Faith Meets Fun!";
-  const heroImage = (typeof ministry?.image === 'object' && ministry?.image?.url)
-    ? ministry.image.url
-    : "/images/ben-wicks-iDCtsz-INHI-unsplash.jpg";
+  const resolvedImage = (typeof ministry?.image === 'object' && ministry?.image?.url) ? ministry.image.url : (ministry?.imageUrl || null);
+  const heroImage = resolvedImage || "/images/ben-wicks-iDCtsz-INHI-unsplash.jpg";
   const heroImageAlt = (typeof ministry?.image === 'object' ? ministry?.image?.alt : null) || "Kids at Marlowe";
-  const sectionImage = (typeof ministry?.image === 'object' && ministry?.image?.url)
-    ? ministry.image.url
-    : "/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg";
+  const sectionImage = resolvedImage || "/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg";
 
   return (
     <>
