@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "frame-ancestors 'self' https://clients.whiteoakmedia.io https://white-oak-media-client-portal.web.app http://localhost:*",
+              "frame-ancestors 'self' https://clients.whiteoakmedia.io https://white-oak-media-client-portal.web.app https://marlowechurch.com https://www.marlowechurch.com http://localhost:*",
           },
           {
             key: "X-Frame-Options",

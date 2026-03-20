@@ -52,6 +52,8 @@ export default buildConfig({
     'http://localhost:5000',
     'https://clients.whiteoakmedia.io',
     'https://white-oak-media-client-portal.web.app',
+    'https://marlowechurch.com',
+    'https://www.marlowechurch.com',
   ],
 
   admin: {
