@@ -59,7 +59,7 @@ const ministries = [
     schedule: 'Every Sunday at 9:00 AM & 11:00 AM',
     order: 1,
     description: '<p>Every Sunday, your kids will experience a safe, engaging, and Christ-centered environment designed just for them! Our services include exciting Bible lessons, worship and praise, interactive games and activities, and small groups for building friendships and helping kids grow spiritually.</p>',
-    imageUrl: 'https://cdn.prod.website-files.com/6793f5cd2f0d64c0c587684f/67c0d6c0e0b0e67c39bde37a_ben-wicks-iDCtsz-INHI-unsplash.jpg',
+    imageUrl: '/images/ben-wicks-iDCtsz-INHI-unsplash.jpg',
   },
   {
     name: 'Foundation Youth',
@@ -67,7 +67,7 @@ const ministries = [
     schedule: 'Sundays at 6:00 PM (Sep\u2013May) / Wednesdays at 7:00 PM (Jun\u2013Aug)',
     order: 2,
     description: '<p>Foundation Youth is a vibrant and welcoming community where students can grow in their faith, build meaningful friendships, and discover their God-given purpose. Through engaging discussions, worship, and fun activities, we create an environment where students feel seen, valued, and encouraged in their spiritual journey.</p><p>Each gathering is an opportunity to connect with others, explore biblical truths, and strengthen your relationship with Christ in a supportive and energetic setting. Whether you\u2019re new to faith or looking to deepen your walk with God, Foundation Youth is a place for you!</p>',
-    imageUrl: 'https://cdn.prod.website-files.com/6793f5cd2f0d64c0c587684f/67c0d89c63e4e71b9e4322d4_Final-Stretch-Website-Image-2.jpeg',
+    imageUrl: '/images/Final-Stretch-for-New-Website.jpeg',
   },
   {
     name: 'Royal Rangers',
@@ -75,7 +75,7 @@ const ministries = [
     schedule: 'Every Wednesday, 7:00\u20138:30 PM',
     order: 3,
     description: '<p>Royal Rangers is a mentoring and discipleship program for boys in Kindergarten through 12th grade. Through adventure, character development, and fellowship, we help young men grow in faith and become Christlike leaders.</p>',
-    imageUrl: 'https://cdn.prod.website-files.com/6793f5cd2f0d64c0c587684f/67c0d71dcf42f5fb8ebc01f2_Royal-Rangers-Event.webp',
+    imageUrl: '/images/Royal-Rangers-Event.webp',
   },
   {
     name: 'Girls Ministries',
@@ -83,7 +83,7 @@ const ministries = [
     schedule: 'Every Wednesday, 7:00\u20138:30 PM',
     order: 4,
     description: '<p>Girls Ministries is a discipleship program that empowers girls in Kindergarten through 12th grade to grow in their faith, build lasting friendships, and discover their God-given purpose. Our goal is simple: to see every girl moving toward a deep relationship with Jesus Christ, and to realize her importance and potential in the kingdom of God.</p>',
-    imageUrl: 'https://cdn.prod.website-files.com/6793f5cd2f0d64c0c587684f/67c0d744e8f9e1fa2a5bb3e6_Girls-Ministries-Image.jpg',
+    imageUrl: '/images/Girls-Ministries-Image.jpg',
   },
 ]
 
