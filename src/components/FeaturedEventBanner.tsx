@@ -1,8 +1,12 @@
 import Link from "next/link";
-import type { Event } from "@/sanity/queries/types";
 
 interface FeaturedEventBannerProps {
-  event: Event;
+  event: {
+    title: string;
+    date?: string;
+    slug?: string;
+    registrationLink?: string | null;
+  };
 }
 
 function formatDate(dateStr: string) {

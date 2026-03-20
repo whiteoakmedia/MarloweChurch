@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" fill="none">
+  <rect width="400" height="260" rx="8" fill="#F8FAFC"/>
+  <rect x="120" y="15" width="160" height="12" rx="3" fill="#2D3748"/>
+  <!-- Card 1 -->
+  <rect x="20" y="45" width="110" height="195" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="24" y="49" width="102" height="65" rx="6" fill="#2D3748"/>
+  <circle cx="75" cy="82" r="14" fill="#F472B6" opacity="0.9"/>
+  <polygon points="71,76 71,88 82,82" fill="#2D3748"/>
+  <rect x="32" y="125" width="80" height="8" rx="2" fill="#2D3748"/>
+  <rect x="32" y="140" width="50" height="5" rx="1" fill="#6366F1" opacity="0.5"/>
+  <rect x="32" y="152" width="60" height="5" rx="1" fill="#64748B" opacity="0.3"/>
+  <!-- Card 2 -->
+  <rect x="145" y="45" width="110" height="195" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="149" y="49" width="102" height="65" rx="6" fill="#2D3748"/>
+  <circle cx="200" cy="82" r="14" fill="#F472B6" opacity="0.9"/>
+  <polygon points="196,76 196,88 207,82" fill="#2D3748"/>
+  <rect x="157" y="125" width="80" height="8" rx="2" fill="#2D3748"/>
+  <rect x="157" y="140" width="50" height="5" rx="1" fill="#6366F1" opacity="0.5"/>
+  <rect x="157" y="152" width="60" height="5" rx="1" fill="#64748B" opacity="0.3"/>
+  <!-- Card 3 -->
+  <rect x="270" y="45" width="110" height="195" rx="8" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="274" y="49" width="102" height="65" rx="6" fill="#2D3748"/>
+  <circle cx="325" cy="82" r="14" fill="#F472B6" opacity="0.9"/>
+  <polygon points="321,76 321,88 332,82" fill="#2D3748"/>
+  <rect x="282" y="125" width="80" height="8" rx="2" fill="#2D3748"/>
+  <rect x="282" y="140" width="50" height="5" rx="1" fill="#6366F1" opacity="0.5"/>
+  <rect x="282" y="152" width="60" height="5" rx="1" fill="#64748B" opacity="0.3"/>
+</svg>

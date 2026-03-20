@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" fill="none">
+  <rect width="400" height="260" rx="8" fill="#2D3748"/>
+  <circle cx="60" cy="50" r="80" fill="#6366F1" opacity="0.12"/>
+  <circle cx="340" cy="210" r="70" fill="#6366F1" opacity="0.08"/>
+  <rect x="90" y="80" width="220" height="16" rx="3" fill="white"/>
+  <rect x="110" y="110" width="180" height="8" rx="2" fill="white" opacity="0.35"/>
+  <rect x="120" y="126" width="160" height="8" rx="2" fill="white" opacity="0.25"/>
+  <rect x="140" y="155" width="120" height="32" rx="8" fill="#F472B6"/>
+  <text x="166" y="176" font-family="system-ui" font-size="11" fill="#2D3748" font-weight="600">Take Action</text>
+</svg>

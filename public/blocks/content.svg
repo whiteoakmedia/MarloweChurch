@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" fill="none">
+  <rect width="400" height="260" rx="8" fill="#F8FAFC"/>
+  <rect x="24" y="40" width="160" height="14" rx="3" fill="#2D3748"/>
+  <rect x="24" y="65" width="150" height="6" rx="2" fill="#64748B" opacity="0.5"/>
+  <rect x="24" y="78" width="140" height="6" rx="2" fill="#64748B" opacity="0.5"/>
+  <rect x="24" y="91" width="130" height="6" rx="2" fill="#64748B" opacity="0.5"/>
+  <rect x="24" y="104" width="120" height="6" rx="2" fill="#64748B" opacity="0.5"/>
+  <rect x="24" y="130" width="80" height="24" rx="5" fill="#2D3748"/>
+  <text x="40" y="146" font-family="system-ui" font-size="9" fill="white" font-weight="600">Read More</text>
+  <rect x="220" y="30" width="156" height="200" rx="12" fill="#E2E8F0"/>
+  <circle cx="298" cy="110" r="30" fill="#CBD5E1"/>
+  <rect x="248" y="160" width="100" height="6" rx="2" fill="#CBD5E1"/>
+  <rect x="258" y="175" width="80" height="6" rx="2" fill="#CBD5E1"/>
+</svg>
