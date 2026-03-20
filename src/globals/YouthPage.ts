@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const YouthPage: GlobalConfig = {
   slug: 'youth-page',
   label: 'Youth Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'heroSubtitle', type: 'text', defaultValue: 'A vibrant community where students grow in faith, build friendships, and discover their God-given purpose.' },
     { name: 'heroCtaText', type: 'text', defaultValue: 'Learn More' },

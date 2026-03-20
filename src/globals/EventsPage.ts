@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const EventsPage: GlobalConfig = {
   slug: 'events-page',
   label: 'Events Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'badge', type: 'text', defaultValue: "What's Happening" },
     { name: 'heroHeading', type: 'text', defaultValue: 'Events' },

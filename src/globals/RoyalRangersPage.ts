@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const RoyalRangersPage: GlobalConfig = {
   slug: 'royal-rangers-page',
   label: 'Royal Rangers & Girls Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'heroSubtitle', type: 'text', defaultValue: 'Building the next generation of Christlike leaders \u2014 every Wednesday night at Marlowe Assembly of God.' },
     {

@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const KidsPage: GlobalConfig = {
   slug: 'kids-page',
   label: 'Kids Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'heroSubtitle', type: 'text', defaultValue: "A place where kids laugh, learn about Jesus, and experience His presence in a way that's exciting and unforgettable!" },
     { name: 'expectHeading', type: 'text', defaultValue: 'What to Expect' },

@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const BeliefsPage: GlobalConfig = {
   slug: 'beliefs-page',
   label: 'Our Beliefs Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'badge', type: 'text', defaultValue: 'Statement of Faith' },
     { name: 'heroHeading', type: 'text', defaultValue: 'Our Beliefs' },

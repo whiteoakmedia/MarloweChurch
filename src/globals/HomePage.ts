@@ -4,7 +4,7 @@ export const HomePage: GlobalConfig = {
   slug: 'home-page',
   label: 'Home Page',
   admin: {
-    group: 'Pages',
+    group: 'Pages & Content',
   },
   fields: [
     {

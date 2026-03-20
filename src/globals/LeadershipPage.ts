@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const LeadershipPage: GlobalConfig = {
   slug: 'leadership-page',
   label: 'Leadership Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'badge', type: 'text', defaultValue: 'Our Team' },
     { name: 'heroHeading', type: 'text', defaultValue: 'Leadership' },

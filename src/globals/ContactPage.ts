@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const ContactPage: GlobalConfig = {
   slug: 'contact-page',
   label: 'Contact Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'badge', type: 'text', defaultValue: 'Get In Touch' },
     { name: 'heroHeading', type: 'text', defaultValue: 'Contact Us' },

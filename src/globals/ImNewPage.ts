@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const ImNewPage: GlobalConfig = {
   slug: 'im-new-page',
   label: "I'm New Page",
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'heroSubtitle', type: 'text', defaultValue: "Whether you're exploring faith or looking for a church to call home, you belong here." },
     { name: 'heroCtaText', type: 'text', defaultValue: "I'm New" },

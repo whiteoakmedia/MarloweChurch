@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const SermonsPage: GlobalConfig = {
   slug: 'sermons-page',
   label: 'Sermons Page',
-  admin: { group: 'Pages' },
+  admin: { group: 'Pages & Content' },
   fields: [
     { name: 'badge', type: 'text', defaultValue: 'Messages' },
     { name: 'heroHeading', type: 'text', defaultValue: 'Sermons' },
