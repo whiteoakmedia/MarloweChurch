@@ -146,3 +146,10 @@ export async function getMinistryBySlug(slug: string) {
     return result.docs[0] || null
   })
 }
+
+// ─── Page globals ───────────────────────────────────────────────────────────
+
+export async function getPageGlobal(slug: string) {
+  const payload = await getPayloadClient()
+  return safePayloadFetch(() => payload.findGlobal({ slug, depth: 2 }))
+}

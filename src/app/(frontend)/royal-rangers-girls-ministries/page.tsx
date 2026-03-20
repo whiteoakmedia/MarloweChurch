@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
-import { getMinistryBySlug } from "@/lib/payload";
+import { getMinistryBySlug, getPageGlobal } from "@/lib/payload";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,8 @@ export const metadata: Metadata = {
 };
 
 export default async function RoyalRangersGirlsMinistriesPage() {
+  const pageContent = await getPageGlobal('royal-rangers-page') as Record<string, any> | null;
+
   const [rangers, girls] = await Promise.all([
     getMinistryBySlug("royal-rangers"),
     getMinistryBySlug("girls-ministries"),
@@ -33,7 +35,7 @@ export default async function RoyalRangersGirlsMinistriesPage() {
       <Navbar variant="transparent" />
       <PageHero
         title={`${rangersName} & ${girlsName}`}
-        subtitle="Building the next generation of Christlike leaders — every Wednesday night at Marlowe Assembly of God."
+        subtitle={pageContent?.heroSubtitle || "Building the next generation of Christlike leaders \u2014 every Wednesday night at Marlowe Assembly of God."}
         image="/images/Kids-Page-Royal-Rangers-Girls-Ministry.jpg"
       />
 
@@ -70,13 +72,16 @@ export default async function RoyalRangersGirlsMinistriesPage() {
               )}
               <h3 className="text-lg font-bold text-church-dark mb-4">What Boys Experience:</h3>
               <div className="space-y-3 mb-8">
-                {[
-                  "Outdoor adventures including camping, hiking, and survival skills",
-                  "Bible-based character development and leadership training",
-                  "Achievement awards and merit badges",
-                  "Service projects that make a real impact in the community",
-                  "Lifelong friendships with other young men of faith",
-                ].map((item) => (
+                {((pageContent?.rangersFeatures && pageContent.rangersFeatures.length > 0)
+                  ? pageContent.rangersFeatures.map((f: any) => f.text)
+                  : [
+                    "Outdoor adventures including camping, hiking, and survival skills",
+                    "Bible-based character development and leadership training",
+                    "Achievement awards and merit badges",
+                    "Service projects that make a real impact in the community",
+                    "Lifelong friendships with other young men of faith",
+                  ]
+                ).map((item: string) => (
                   <div key={item} className="flex items-start gap-3">
                     <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <svg aria-hidden="true" className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,7 +94,7 @@ export default async function RoyalRangersGirlsMinistriesPage() {
               </div>
               <div className="flex flex-wrap gap-3">
                 <a
-                  href="https://marloweag.churchcenter.com/people/forms/948916"
+                  href={pageContent?.rangersSignupUrl || "https://marloweag.churchcenter.com/people/forms/948916"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-colors shadow-md"
@@ -97,7 +102,7 @@ export default async function RoyalRangersGirlsMinistriesPage() {
                   Sign Up Today
                 </a>
                 <a
-                  href="https://www.facebook.com/groups/328097517014117"
+                  href={pageContent?.rangersFacebookUrl || "https://www.facebook.com/groups/328097517014117"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 border-2 border-church-green text-church-green font-medium rounded-full hover:bg-church-green hover:text-white transition-colors"
@@ -136,14 +141,17 @@ export default async function RoyalRangersGirlsMinistriesPage() {
               )}
               <h3 className="text-lg font-bold text-church-dark mb-4">What Girls Experience:</h3>
               <div className="space-y-3 mb-8">
-                {[
-                  "Age-appropriate Bible studies and devotions",
-                  "Creative arts, crafts, and hands-on projects",
-                  "Community service and missions awareness",
-                  "Achievement awards and badges for spiritual growth",
-                  "Fun events, sleepovers, and special outings",
-                  "Mentorship from godly women leaders",
-                ].map((item) => (
+                {((pageContent?.girlsFeatures && pageContent.girlsFeatures.length > 0)
+                  ? pageContent.girlsFeatures.map((f: any) => f.text)
+                  : [
+                    "Age-appropriate Bible studies and devotions",
+                    "Creative arts, crafts, and hands-on projects",
+                    "Community service and missions awareness",
+                    "Achievement awards and badges for spiritual growth",
+                    "Fun events, sleepovers, and special outings",
+                    "Mentorship from godly women leaders",
+                  ]
+                ).map((item: string) => (
                   <div key={item} className="flex items-start gap-3">
                     <div className="w-6 h-6 rounded-full bg-pink-500 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <svg aria-hidden="true" className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -155,7 +163,7 @@ export default async function RoyalRangersGirlsMinistriesPage() {
                 ))}
               </div>
               <a
-                href="https://marloweag.churchcenter.com/people/forms/948886"
+                href={pageContent?.girlsSignupUrl || "https://marloweag.churchcenter.com/people/forms/948886"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-colors shadow-md"
@@ -221,21 +229,10 @@ export default async function RoyalRangersGirlsMinistriesPage() {
 
           <div className="bg-church-cream rounded-2xl p-8 md:p-10">
             <p className="text-church-gray leading-relaxed text-center max-w-3xl mx-auto">
-              Every Wednesday night from 7:00&ndash;8:30 PM, our church comes alive with midweek
-              programs designed just for kids and teens. We gather in the church fellowship hall, and
-              there&apos;s something for everyone&mdash;starting at age 3 and going all the way
-              through high school. Whether you&apos;re a member of the church or not, your family is
-              welcome to join us! Each age group has its own class filled with Bible-based activities
-              that help them grow in their faith in fun, engaging ways. Kids have the chance to earn
-              achievements through scripture memorization, completing lessons, and participating in
-              special projects. At the end of the season, we&apos;ll celebrate their hard work with
-              an awards ceremony. Throughout the year, we also have exciting events, campouts, and
-              other fun activities planned to keep kids connected and energized.
+              {pageContent?.scheduleDescription || "Every Wednesday night from 7:00\u20138:30 PM, our church comes alive with midweek programs designed just for kids and teens. We gather in the church fellowship hall, and there\u2019s something for everyone\u2014starting at age 3 and going all the way through high school. Whether you\u2019re a member of the church or not, your family is welcome to join us! Each age group has its own class filled with Bible-based activities that help them grow in their faith in fun, engaging ways. Kids have the chance to earn achievements through scripture memorization, completing lessons, and participating in special projects. At the end of the season, we\u2019ll celebrate their hard work with an awards ceremony. Throughout the year, we also have exciting events, campouts, and other fun activities planned to keep kids connected and energized."}
             </p>
             <p className="text-church-gray text-sm text-center mt-4 italic">
-              Please note &mdash; we do take a break for the summer, but during the school year,
-              it&apos;s a great midweek opportunity for your kids to grow, learn, and make lasting
-              friendships.
+              {pageContent?.scheduleNote || "Please note \u2014 we do take a break for the summer, but during the school year, it\u2019s a great midweek opportunity for your kids to grow, learn, and make lasting friendships."}
             </p>
           </div>
         </div>
@@ -245,14 +242,14 @@ export default async function RoyalRangersGirlsMinistriesPage() {
       <section className="py-24 bg-church-green text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Get your kids connected!
+            {pageContent?.ctaHeading || "Get your kids connected!"}
           </h2>
           <p className="text-white/80 text-lg mb-8">
-            Join us this Wednesday night for an unforgettable experience.
+            {pageContent?.ctaBody || "Join us this Wednesday night for an unforgettable experience."}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://marloweag.churchcenter.com/people/forms/948916"
+              href={pageContent?.rangersSignupUrl || "https://marloweag.churchcenter.com/people/forms/948916"}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-white text-church-green font-semibold rounded-full hover:bg-church-cream transition-colors shadow-xl"
@@ -260,7 +257,7 @@ export default async function RoyalRangersGirlsMinistriesPage() {
               Sign Up for Royal Rangers
             </a>
             <a
-              href="https://marloweag.churchcenter.com/people/forms/948886"
+              href={pageContent?.girlsSignupUrl || "https://marloweag.churchcenter.com/people/forms/948886"}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-white/10 text-white border-2 border-white/30 font-semibold rounded-full hover:bg-white/20 transition-colors"

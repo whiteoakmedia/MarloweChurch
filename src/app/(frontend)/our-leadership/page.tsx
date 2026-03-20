@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import { getStaff } from "@/lib/payload";
+import { getStaff, getPageGlobal } from "@/lib/payload";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +42,7 @@ const fallbackStaff: { name: string; role: string; bio: string; image: string }[
 
 export default async function OurLeadershipPage() {
   const staffData = await getStaff();
+  const pageContent = await getPageGlobal('leadership-page') as Record<string, any> | null;
 
   // Split into pastors and staff — if Payload has data, use it; else fallback
   const usePayload = staffData && staffData.length > 0;
@@ -61,9 +62,9 @@ export default async function OurLeadershipPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-              Our Team
+              {pageContent?.badge || "Our Team"}
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-church-dark">Leadership</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-church-dark">{pageContent?.heroHeading || "Leadership"}</h1>
           </div>
 
           {/* Lead Pastor(s) */}

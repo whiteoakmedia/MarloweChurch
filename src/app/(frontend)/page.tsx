@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-import { getSiteSettings, getMinistries, getEvents, getFeaturedEvents } from "@/lib/payload";
+import { getSiteSettings, getMinistries, getEvents, getFeaturedEvents, getPageGlobal } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
@@ -34,25 +34,54 @@ const fallbackMinistryCards = [
 ];
 
 export default async function Home() {
-  const [siteSettings, ministries, upcomingEvents, featuredEvents] = await Promise.all([
+  const [siteSettings, ministries, upcomingEvents, featuredEvents, homeContent] = await Promise.all([
     getSiteSettings(),
     getMinistries(),
     getEvents(),
     getFeaturedEvents(),
+    getPageGlobal('home-page') as Promise<Record<string, any> | null>,
   ]);
   const featuredEvent = featuredEvents && featuredEvents.length > 0
     ? { ...featuredEvents[0], registrationLink: featuredEvents[0].registrationUrl }
     : null;
 
   // Hero fields
-  const heroHeading = "Love God, Love People,";
-  const heroSubtext = "New here? We'd love to meet you.";
+  const heroHeading = homeContent?.heroHeading || "Love God, Love People,";
+  const heroSubtext = homeContent?.heroSubheading || "New here? We'd love to meet you.";
+  const heroCtaText = homeContent?.heroCtaText || "I'm New";
+  const heroCtaLink = homeContent?.heroCtaLink || "/im-new";
 
   // About / welcome section
-  const aboutHeading =
-    "We are an Assemblies of God Church located in Marlowe, WV.";
-  const aboutText =
-    "At Marlowe Church, we are passionate about encountering God, growing in faith, and serving our community with love. Whether you're exploring faith for the first time or looking for a church to call home, you'll find a welcoming family here. Our mission is to share the hope of Jesus, build authentic relationships, and equip people to live out their faith in everyday life.";
+  const welcomeBadge = homeContent?.welcomeBadge || "Welcome Home";
+  const aboutHeading = homeContent?.welcomeHeading || "We are an Assemblies of God Church located in Marlowe, WV.";
+  const videoUrl = homeContent?.welcomeVideoUrl || "https://www.youtube.com/embed/qQLEIyhxsMY?rel=0&controls=0&autoplay=0&mute=1";
+  const welcomeCtaText = homeContent?.welcomeCtaText || "Meet Our Leadership";
+  const welcomeCtaLink = homeContent?.welcomeCtaLink || "/our-leadership";
+
+  // Weekly message section
+  const messageHeading = homeContent?.messageHeading || "Weekly Message";
+  const messageSubheading = homeContent?.messageSubheading || "Can't make it in person? Watch our latest sermon or tune in live every Sunday.";
+  const messageLiveUrl = homeContent?.messageLiveUrl || "https://www.youtube.com/@marloweassemblyofgod523/streams";
+
+  // Church Center app section
+  const appHeading = homeContent?.appHeading || "Give, sign up for events, connect with community, and more!";
+  const appSubheading = homeContent?.appSubheading || "Download the app today!";
+  const appStoreUrl = homeContent?.appStoreUrl || "https://apps.apple.com/us/app/church-center-app/id1357742931?ign-mpt=uo%3D4&ls=1";
+  const playStoreUrl = homeContent?.playStoreUrl || "https://play.google.com/store/apps/details?id=com.ministrycentered.churchcenter&pli=1";
+
+  // Ministries section
+  const ministriesBadge = homeContent?.ministriesBadge || "Get Involved";
+  const ministriesHeading = homeContent?.ministriesHeading || "There's a place for everyone";
+
+  // Events section
+  const eventsHeading = homeContent?.eventsHeading || "Upcoming Events";
+  const eventsSubheading = homeContent?.eventsSubheading || "Stay connected with what's happening at Marlowe.";
+
+  // CTA section
+  const ctaHeading = homeContent?.ctaHeading || "Worship at Marlowe";
+  const ctaBody = homeContent?.ctaBody || "No matter where you are in your journey, there's a place for you here.";
+  const ctaButtonText = homeContent?.ctaButtonText || "I'm New";
+  const ctaButtonLink = homeContent?.ctaButtonLink || "/im-new";
 
   // Ministry cards — prefer ministries collection from Payload, then fallback
   const ministryCards =
@@ -100,10 +129,10 @@ export default async function Home() {
             {heroSubtext}
           </p>
           <Link
-            href="/im-new"
+            href={heroCtaLink}
             className="inline-block px-8 py-3 bg-church-blue text-white text-base font-semibold rounded-full hover:bg-church-blue-dark transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
           >
-            I&apos;m New
+            {heroCtaText}
           </Link>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
@@ -115,7 +144,7 @@ export default async function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl">
               <iframe
-                src="https://www.youtube.com/embed/qQLEIyhxsMY?rel=0&controls=0&autoplay=0&mute=1"
+                src={videoUrl}
                 frameBorder="0"
                 className="w-full h-full"
                 allow="autoplay; encrypted-media"
@@ -125,19 +154,16 @@ export default async function Home() {
             </div>
             <div>
               <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-                Welcome Home
+                {welcomeBadge}
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-6 leading-tight">
                 {aboutHeading}
               </h2>
-              <p className="text-church-gray leading-relaxed mb-8">
-                {aboutText}
-              </p>
               <Link
-                href="/our-leadership"
+                href={welcomeCtaLink}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-all duration-200 shadow-md hover:shadow-lg"
               >
-                Meet Our Leadership
+                {welcomeCtaText}
                 <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -153,13 +179,13 @@ export default async function Home() {
           <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
             This Week
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-4">Weekly Message</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-4">{messageHeading}</h2>
           <p className="text-church-gray mb-10 max-w-2xl mx-auto">
-            Can&apos;t make it in person? Watch our latest sermon or tune in live every Sunday.
+            {messageSubheading}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://www.youtube.com/@marloweassemblyofgod523/streams"
+              href={messageLiveUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3.5 bg-church-green text-white font-semibold rounded-full hover:bg-church-green-dark transition-all duration-200 shadow-md hover:shadow-lg"
@@ -194,14 +220,14 @@ export default async function Home() {
                 Stay Connected
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-4 leading-tight">
-                Give, sign up for events, connect with community, and more!
+                {appHeading}
               </h2>
               <p className="text-xl text-church-blue font-semibold mb-8">
-                Download the app today!
+                {appSubheading}
               </p>
               <div className="flex items-center gap-4">
                 <a
-                  href="https://apps.apple.com/us/app/church-center-app/id1357742931?ign-mpt=uo%3D4&ls=1"
+                  href={appStoreUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-transform hover:scale-105"
@@ -214,7 +240,7 @@ export default async function Home() {
                   />
                 </a>
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.ministrycentered.churchcenter&pli=1"
+                  href={playStoreUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-transform hover:scale-105"
@@ -237,10 +263,10 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-              Get Involved
+              {ministriesBadge}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-church-dark">
-              There&apos;s a place for everyone
+              {ministriesHeading}
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -284,8 +310,8 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white">Upcoming Events</h2>
-              <p className="text-white/70 mt-2">Stay connected with what&apos;s happening at Marlowe.</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-white">{eventsHeading}</h2>
+              <p className="text-white/70 mt-2">{eventsSubheading}</p>
             </div>
             <Link
               href="/events"
@@ -369,16 +395,16 @@ export default async function Home() {
       <section className="py-24 bg-church-cream text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-church-dark mb-6">
-            Worship at Marlowe
+            {ctaHeading}
           </h2>
           <p className="text-church-gray text-lg mb-8">
-            No matter where you are in your journey, there&apos;s a place for you here.
+            {ctaBody}
           </p>
           <Link
-            href="/im-new"
+            href={ctaButtonLink}
             className="inline-block px-10 py-4 bg-church-green text-white text-lg font-semibold rounded-full hover:bg-church-green-dark transition-all duration-300 shadow-xl hover:shadow-2xl"
           >
-            I&apos;m New
+            {ctaButtonText}
           </Link>
         </div>
       </section>

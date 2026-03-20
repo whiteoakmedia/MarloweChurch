@@ -30,6 +30,16 @@ import {
 import { SiteSettings } from './globals/SiteSettings'
 import { Navigation } from './globals/Navigation'
 import { AnnouncementBanner } from './globals/AnnouncementBanner'
+import { HomePage } from './globals/HomePage'
+import { EventsPage } from './globals/EventsPage'
+import { SermonsPage } from './globals/SermonsPage'
+import { LeadershipPage } from './globals/LeadershipPage'
+import { ContactPage } from './globals/ContactPage'
+import { BeliefsPage } from './globals/BeliefsPage'
+import { KidsPage } from './globals/KidsPage'
+import { YouthPage } from './globals/YouthPage'
+import { RoyalRangersPage } from './globals/RoyalRangersPage'
+import { ImNewPage } from './globals/ImNewPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -61,7 +71,7 @@ export default buildConfig({
     livePreview: {
       url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       collections: ['pages', 'staff', 'events', 'sermons', 'ministries', 'posts'],
-      globals: ['site-settings', 'navigation', 'announcement-banner'],
+      globals: ['site-settings', 'navigation', 'announcement-banner', 'home-page', 'events-page', 'sermons-page', 'leadership-page', 'contact-page', 'beliefs-page', 'kids-page', 'youth-page', 'royal-rangers-page', 'im-new-page'],
     },
   },
 
@@ -98,6 +108,16 @@ export default buildConfig({
     SiteSettings,
     Navigation,
     AnnouncementBanner,
+    HomePage,
+    EventsPage,
+    SermonsPage,
+    LeadershipPage,
+    ContactPage,
+    BeliefsPage,
+    KidsPage,
+    YouthPage,
+    RoyalRangersPage,
+    ImNewPage,
   ],
 
   db: postgresAdapter({

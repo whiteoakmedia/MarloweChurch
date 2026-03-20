@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { getEvents } from "@/lib/payload";
+import { getEvents, getPageGlobal } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
@@ -28,8 +28,7 @@ function formatTime(dateStr: string) {
 
 export default async function EventsPage() {
   const events = await getEvents();
-
-  const heading = "Events";
+  const pageContent = await getPageGlobal('events-page') as Record<string, any> | null;
 
   return (
     <>
@@ -39,13 +38,13 @@ export default async function EventsPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-              What&apos;s Happening
+              {pageContent?.badge || "What's Happening"}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-church-dark mb-4">
-              {heading}
+              {pageContent?.heroHeading || "Events"}
             </h1>
             <p className="text-church-gray max-w-2xl mx-auto">
-              {"Join us for fellowship, worship, and community. There is always something happening at Marlowe Assembly of God."}
+              {pageContent?.heroSubheading || "Join us for fellowship, worship, and community. There is always something happening at Marlowe Assembly of God."}
             </p>
           </div>
 

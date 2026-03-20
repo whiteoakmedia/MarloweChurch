@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
-import { getMinistryBySlug } from "@/lib/payload";
+import { getMinistryBySlug, getPageGlobal } from "@/lib/payload";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 
 export default async function YouthPage() {
   const ministry = await getMinistryBySlug("youth") as Record<string, any> | null;
+  const pageContent = await getPageGlobal('youth-page') as Record<string, any> | null;
 
   const heroTitle = ministry?.name || "Foundation Youth";
   const heroImage = (typeof ministry?.image === 'object' && ministry?.image?.url)
@@ -28,10 +29,10 @@ export default async function YouthPage() {
       <Navbar variant="transparent" />
       <PageHero
         title={heroTitle}
-        subtitle="A vibrant community where students grow in faith, build friendships, and discover their God-given purpose."
+        subtitle={pageContent?.heroSubtitle || "A vibrant community where students grow in faith, build friendships, and discover their God-given purpose."}
         image={heroImage}
-        ctaText="Learn More"
-        ctaHref="https://marloweag.churchcenter.com/people/forms/948961"
+        ctaText={pageContent?.heroCtaText || "Learn More"}
+        ctaHref={pageContent?.heroCtaUrl || "https://marloweag.churchcenter.com/people/forms/948961"}
       />
 
       {/* About Foundation Youth */}
@@ -100,34 +101,35 @@ export default async function YouthPage() {
                 When We Meet
               </h2>
               <div className="space-y-6">
-                <div className="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-md">
-                  <div className="w-12 h-12 bg-church-green rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg aria-hidden="true" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                {((pageContent?.schedule && pageContent.schedule.length > 0)
+                  ? pageContent.schedule
+                  : [
+                    { season: "September \u2013 May", dayTime: "Sundays at 6:00 PM" },
+                    { season: "June \u2013 August", dayTime: "Wednesdays at 7:00 PM" },
+                  ]
+                ).map((item: any, idx: number) => (
+                  <div key={idx} className="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-md">
+                    <div className={`w-12 h-12 ${idx === 0 ? 'bg-church-green' : 'bg-church-blue'} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                      <svg aria-hidden="true" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {idx === 0 ? (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        ) : (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
+                        )}
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-church-dark text-lg">{item.season}</h3>
+                      <p className="text-church-gray">{item.dayTime}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-church-dark text-lg">September &ndash; May</h3>
-                    <p className="text-church-gray">Sundays at 6:00 PM</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4 p-6 bg-white rounded-2xl shadow-md">
-                  <div className="w-12 h-12 bg-church-blue rounded-xl flex items-center justify-center flex-shrink-0">
-                    <svg aria-hidden="true" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-church-dark text-lg">June &ndash; August</h3>
-                    <p className="text-church-gray">Wednesdays at 7:00 PM</p>
-                  </div>
-                </div>
+                ))}
               </div>
               <p className="text-church-gray mt-6 text-sm">
                 Come as you are, bring a friend, and be part of something bigger than yourself!
               </p>
               <a
-                href="https://www.facebook.com/groups/482522585595219"
+                href={pageContent?.facebookUrl || "https://www.facebook.com/groups/482522585595219"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-colors"
@@ -143,10 +145,10 @@ export default async function YouthPage() {
       <section className="py-24 bg-church-green text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Come be part of Foundation Youth
+            {pageContent?.ctaHeading || "Come be part of Foundation Youth"}
           </h2>
           <a
-            href="https://marloweag.churchcenter.com/people/forms/948961"
+            href={pageContent?.ctaUrl || "https://marloweag.churchcenter.com/people/forms/948961"}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-10 py-4 bg-white text-church-green text-lg font-semibold rounded-full hover:bg-church-cream transition-all duration-300 shadow-xl"

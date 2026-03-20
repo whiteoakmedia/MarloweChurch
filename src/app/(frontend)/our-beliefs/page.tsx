@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import { getPageGlobal } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
@@ -168,7 +169,11 @@ const fallbackBeliefs: FallbackBelief[] = [
 ];
 
 export default async function OurBeliefsPage() {
-  const beliefs: FallbackBelief[] = fallbackBeliefs;
+  const pageContent = await getPageGlobal('beliefs-page') as Record<string, any> | null;
+
+  const beliefs: FallbackBelief[] = (pageContent?.beliefs && pageContent.beliefs.length > 0)
+    ? pageContent.beliefs
+    : fallbackBeliefs;
 
   const half = Math.ceil(beliefs.length / 2);
   const col1 = beliefs.slice(0, half);
@@ -181,9 +186,9 @@ export default async function OurBeliefsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-              Statement of Faith
+              {pageContent?.badge || "Statement of Faith"}
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-church-dark">Our Beliefs</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-church-dark">{pageContent?.heroHeading || "Our Beliefs"}</h1>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -223,12 +228,12 @@ export default async function OurBeliefsPage() {
 
           <div className="mt-12 text-center">
             <a
-              href="https://www.potomacag.org/"
+              href={pageContent?.denominationUrl || "https://www.potomacag.org/"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-church-green text-white font-medium rounded-full hover:bg-church-green-dark transition-colors"
             >
-              Potomac Network and National AG Website
+              {pageContent?.denominationLabel || "Potomac Network and National AG Website"}
               <svg aria-hidden="true" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>

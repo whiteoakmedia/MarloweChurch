@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import ContactForm from "./ContactForm";
-import { getSiteSettings } from "@/lib/payload";
+import { getSiteSettings, getPageGlobal } from "@/lib/payload";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +13,7 @@ export const metadata: Metadata = {
 
 export default async function ContactPageRoute() {
   const settings = await getSiteSettings() as Record<string, any> | null;
-
-  const heading = "Contact Us";
-  const subheading =
-    "We'd love to hear from you. Reach out with any questions, prayer requests, or just to say hello.";
+  const pageContent = await getPageGlobal('contact-page') as Record<string, any> | null;
 
   // Fallback values from the layout structured data / footer
   const phone = settings?.phone || "(304) 274-2474";
@@ -37,19 +34,19 @@ export default async function ContactPageRoute() {
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-1.5 bg-church-green-light text-church-green text-sm font-semibold rounded-full mb-4">
-              Get In Touch
+              {pageContent?.badge || "Get In Touch"}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-church-dark mb-4">
-              {heading}
+              {pageContent?.heroHeading || "Contact Us"}
             </h1>
-            <p className="text-church-gray max-w-2xl mx-auto">{subheading}</p>
+            <p className="text-church-gray max-w-2xl mx-auto">{pageContent?.heroSubheading || "We'd love to hear from you. Reach out with any questions, prayer requests, or just to say hello."}</p>
           </div>
 
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact Form — takes more space */}
             <div className="lg:col-span-3 bg-church-cream rounded-2xl p-8 md:p-10">
               <h2 className="text-2xl font-bold text-church-dark mb-6">
-                Send Us a Message
+                {pageContent?.formHeading || "Send Us a Message"}
               </h2>
               <ContactForm />
             </div>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
-import { getSiteSettings } from "@/lib/payload";
+import { getSiteSettings, getPageGlobal } from "@/lib/payload";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 
 export default async function ImNewPage() {
   const siteSettings = await getSiteSettings() as Record<string, any> | null;
+  const pageContent = await getPageGlobal('im-new-page') as Record<string, any> | null;
   const aboutPage = null;
 
   const churchName = siteSettings?.churchName || "Marlowe AG";
@@ -24,10 +25,10 @@ export default async function ImNewPage() {
       <Navbar variant="transparent" />
       <PageHero
         title={siteSettings?.tagline || "We are so glad you're here!"}
-        subtitle="Whether you're exploring faith or looking for a church to call home, you belong here."
+        subtitle={pageContent?.heroSubtitle || "Whether you're exploring faith or looking for a church to call home, you belong here."}
         image="/images/Image-from-Bulk-Resize-Photos.jpg"
-        ctaText="I'm New"
-        ctaHref="https://marloweag.churchcenter.com/people/forms/920327"
+        ctaText={pageContent?.heroCtaText || "I'm New"}
+        ctaHref={pageContent?.heroCtaUrl || "https://marloweag.churchcenter.com/people/forms/920327"}
       />
 
       {/* About Section */}
@@ -47,14 +48,7 @@ export default async function ImNewPage() {
                 </div>
               ) : (
                 <p className="text-church-gray leading-relaxed">
-                  At Marlowe Church, we are passionate about encountering God, growing in faith, and
-                  serving our community with love. Whether you&apos;re exploring faith for the first
-                  time or looking for a church to call home, you&apos;ll find a welcoming family here.
-                  Our mission is to share the hope of Jesus, build authentic relationships, and equip
-                  people to live out their faith in everyday life. No matter where you are in your
-                  journey, there&apos;s a place for you at Marlowe. Join us and experience a church
-                  where faith is real, community is strong, and lives are transformed. We can&apos;t
-                  wait to meet you!
+                  {pageContent?.aboutFallbackText || "At Marlowe Church, we are passionate about encountering God, growing in faith, and serving our community with love. Whether you\u2019re exploring faith for the first time or looking for a church to call home, you\u2019ll find a welcoming family here. Our mission is to share the hope of Jesus, build authentic relationships, and equip people to live out their faith in everyday life. No matter where you are in your journey, there\u2019s a place for you at Marlowe. Join us and experience a church where faith is real, community is strong, and lives are transformed. We can\u2019t wait to meet you!"}
                 </p>
               )}
             </div>
@@ -75,11 +69,11 @@ export default async function ImNewPage() {
       <section className="py-20 bg-church-cream">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-church-dark mb-10">
-            No matter where you are, join us for Church.
+            {pageContent?.joinHeading || "No matter where you are, join us for Church."}
           </h2>
           <div className="grid sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             <a
-              href="https://www.youtube.com/@marloweassemblyofgod523/streams"
+              href={pageContent?.liveStreamUrl || "https://www.youtube.com/@marloweassemblyofgod523/streams"}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex flex-col items-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
@@ -93,7 +87,7 @@ export default async function ImNewPage() {
               <p className="text-church-gray text-sm">Watch our live stream from anywhere</p>
             </a>
             <a
-              href="https://marloweag.churchcenter.com/people/forms/920144"
+              href={pageContent?.visitFormUrl || "https://marloweag.churchcenter.com/people/forms/920144"}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex flex-col items-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
@@ -115,15 +109,15 @@ export default async function ImNewPage() {
       <section className="py-24 bg-church-green text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            We can&apos;t wait to meet you!
+            {pageContent?.ctaHeading || "We can\u2019t wait to meet you!"}
           </h2>
           <a
-            href="https://marloweag.churchcenter.com/people/forms/920144"
+            href={pageContent?.ctaUrl || "https://marloweag.churchcenter.com/people/forms/920144"}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-10 py-4 bg-white text-church-green text-lg font-semibold rounded-full hover:bg-church-cream transition-all duration-300 shadow-xl"
           >
-            Let Us Know When You&apos;re Coming!
+            {pageContent?.ctaButtonText || "Let Us Know When You\u2019re Coming!"}
           </a>
         </div>
       </section>
