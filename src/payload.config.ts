@@ -47,14 +47,7 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-in-production',
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-  cors: [
-    'http://localhost:5003',
-    'http://localhost:5000',
-    'https://clients.whiteoakmedia.io',
-    'https://white-oak-media-client-portal.web.app',
-    'https://marlowechurch.com',
-    'https://www.marlowechurch.com',
-  ],
+  cors: '*',
 
   admin: {
     user: Users.slug,
