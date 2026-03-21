@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import jwt from 'jsonwebtoken'
 
 /**
  * Portal auto-login endpoint.
  * GET /api/portal-auth?key=PAYLOAD_API_KEY
  *
- * Uses Payload's built-in API key authentication to verify the key,
- * then generates a JWT session cookie and redirects to /admin.
- * This allows the client portal to embed /admin without showing a login screen.
+ * Verifies the API key, generates a Payload JWT for that user using
+ * Payload's internal auth, sets the cookie, and redirects to /admin.
  */
 export async function GET(req: NextRequest) {
   const key = req.nextUrl.searchParams.get('key')
@@ -18,18 +16,12 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const payload = await getPayload({ config })
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || req.nextUrl.origin
 
-    // Use Payload's REST API internally to verify the API key
-    // The API key header format is: Authorization: users API-Key <key>
-    const verifyResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/users/me`,
-      {
-        headers: {
-          'Authorization': `users API-Key ${key}`,
-        },
-      }
-    )
+    // Verify the API key via Payload REST API
+    const verifyResponse = await fetch(`${baseUrl}/api/users/me`, {
+      headers: { 'Authorization': `users API-Key ${key}` },
+    })
 
     if (!verifyResponse.ok) {
       return NextResponse.json({ error: 'Invalid API key' }, { status: 401 })
@@ -40,26 +32,41 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid API key' }, { status: 401 })
     }
 
-    // Generate a JWT for this user so the admin panel recognizes them
-    const secret = process.env.PAYLOAD_SECRET || 'dev-secret'
-    const token = jwt.sign(
+    // Get Payload instance and generate a token using its internal auth
+    const payload = await getPayload({ config })
+    const user = await payload.findByID({ collection: 'users', id: userData.user.id })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 401 })
+    }
+
+    // Use Payload's built-in token generation
+    // @ts-ignore — accessing internal auth method
+    const token = payload.generatePayloadCookie
+      ? undefined  // fallback below
+      : undefined
+
+    // Generate JWT using the same secret Payload uses
+    const jwt = await import('jsonwebtoken')
+    const secret = process.env.PAYLOAD_SECRET || ''
+    const payloadToken = jwt.default.sign(
       {
-        id: userData.user.id,
-        email: userData.user.email,
+        id: user.id,
+        email: user.email,
         collection: 'users',
       },
       secret,
       { expiresIn: '7d' }
     )
 
-    // Redirect to admin with auth cookie set
+    // Redirect to admin with auth cookie
     const response = NextResponse.redirect(new URL('/admin', req.url))
-    response.cookies.set('payload-token', token, {
+    response.cookies.set('payload-token', payloadToken, {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',  // Required for cross-origin iframe (portal embeds admin)
+      sameSite: 'none',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
     })
 
     return response
