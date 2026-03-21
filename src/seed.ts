@@ -164,6 +164,27 @@ export async function seed(payload: Payload) {
     return
   }
 
+  // ── Portal Editor User ───────────────────────────────────────────────────
+  console.log('Seeding editor user...')
+  try {
+    const existingUsers = await payload.find({ collection: 'users', limit: 1 })
+    if (existingUsers.docs.length === 0) {
+      await payload.create({
+        collection: 'users',
+        data: {
+          name: 'Portal Editor',
+          email: 'editor@whiteoakmedia.io',
+          password: process.env.PAYLOAD_EDITOR_PASSWORD || 'portal-editor-2024',
+          role: 'editor',
+          enableAPIKey: true,
+        },
+      })
+      console.log('  \u2713 Portal Editor user created')
+    }
+  } catch (e) {
+    console.error('  \u2717 Editor user:', (e as Error).message)
+  }
+
   // ── Site Settings ─────────────────────────────────────────────────────────
   console.log('Seeding site settings...')
   try {
