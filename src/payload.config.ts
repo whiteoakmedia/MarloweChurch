@@ -15,8 +15,7 @@ import { SermonSeries, SermonTopics } from './collections/SermonTaxonomy'
 import { Events } from './collections/Events'
 import { Ministries } from './collections/Ministries'
 import { SmallGroups } from './collections/SmallGroups'
-import { Posts } from './collections/Posts'
-import { Pages } from './collections/Pages'
+// Pages and Posts collections removed — Marlowe uses page globals instead
 import { Forms, FormSubmissions } from './collections/Forms'
 import {
   PrayerRequests,
@@ -65,7 +64,7 @@ export default buildConfig({
     },
     livePreview: {
       url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-      collections: ['pages', 'staff', 'events', 'sermons', 'ministries', 'posts'],
+      collections: ['staff', 'events', 'sermons', 'ministries'],
       globals: ['site-settings', 'navigation', 'announcement-banner', 'home-page', 'events-page', 'sermons-page', 'leadership-page', 'contact-page', 'beliefs-page', 'kids-page', 'youth-page', 'royal-rangers-page', 'im-new-page'],
     },
   },
@@ -78,8 +77,6 @@ export default buildConfig({
   editor: lexicalEditor({}),
 
   collections: [
-    Pages,
-    Posts,
     Staff,
     Events,
     Sermons,
