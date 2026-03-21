@@ -6,6 +6,12 @@ export const Users: CollectionConfig = {
     tokenExpiration: 604800, // 7 days
     useAPIKey: true,
   },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
+  },
   admin: {
     group: 'Admin',
     description: 'Manage admin accounts and editor permissions.',
