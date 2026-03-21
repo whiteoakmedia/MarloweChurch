@@ -56,8 +56,8 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.redirect(new URL('/admin', req.url))
     response.cookies.set('payload-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',  // Required for cross-origin iframe (portal embeds admin)
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
