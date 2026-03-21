@@ -15,7 +15,8 @@ import { SermonSeries, SermonTopics } from './collections/SermonTaxonomy'
 import { Events } from './collections/Events'
 import { Ministries } from './collections/Ministries'
 import { SmallGroups } from './collections/SmallGroups'
-// Pages and Posts collections removed — Marlowe uses page globals instead
+import { Posts } from './collections/Posts'
+import { Pages } from './collections/Pages'
 import { Forms, FormSubmissions } from './collections/Forms'
 import {
   PrayerRequests,
@@ -77,6 +78,8 @@ export default buildConfig({
   editor: lexicalEditor({}),
 
   collections: [
+    Pages,
+    Posts,
     Staff,
     Events,
     Sermons,

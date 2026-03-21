@@ -16,8 +16,9 @@ import { FAQBlock } from '../blocks/FAQBlock'
 export const Pages: CollectionConfig = {
   slug: 'pages',
   admin: {
-    group: 'Pages & Content',
+    group: 'Advanced',
     description: 'Build and edit the pages on your website using drag-and-drop sections.',
+    hidden: true,
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'status', 'updatedAt'],
   },

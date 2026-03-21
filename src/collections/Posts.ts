@@ -3,8 +3,9 @@ import type { CollectionConfig } from 'payload'
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
-    group: 'Pages & Content',
+    group: 'Advanced',
     description: 'Write blog posts, devotionals, and news updates.',
+    hidden: true,
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'publishedDate', 'status'],
   },
