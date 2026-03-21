@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import jwt from 'jsonwebtoken'
 
 /**
  * Portal auto-login endpoint.
  * GET /api/portal-auth?key=PAYLOAD_API_KEY
  *
- * Validates the API key against Users collection, generates a JWT,
- * sets the auth cookie, and redirects to /admin.
+ * Uses Payload's built-in API key authentication to verify the key,
+ * then generates a JWT session cookie and redirects to /admin.
  * This allows the client portal to embed /admin without showing a login screen.
  */
 export async function GET(req: NextRequest) {
@@ -19,36 +20,43 @@ export async function GET(req: NextRequest) {
   try {
     const payload = await getPayload({ config })
 
-    // Find user by API key
-    const users = await payload.find({
-      collection: 'users',
-      where: { apiKey: { equals: key } },
-      limit: 1,
-    })
+    // Use Payload's REST API internally to verify the API key
+    // The API key header format is: Authorization: users API-Key <key>
+    const verifyResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/users/me`,
+      {
+        headers: {
+          'Authorization': `users API-Key ${key}`,
+        },
+      }
+    )
 
-    const user = users.docs[0]
-    if (!user) {
+    if (!verifyResponse.ok) {
       return NextResponse.json({ error: 'Invalid API key' }, { status: 401 })
     }
 
-    // Generate a JWT token for this user
-    const loginResult = await payload.login({
-      collection: 'users',
-      data: {
-        email: user.email,
-        password: process.env.PAYLOAD_EDITOR_PASSWORD || 'portal-editor-2024',
-      },
-    })
-
-    if (!loginResult.token) {
-      return NextResponse.json({ error: 'Login failed' }, { status: 500 })
+    const userData = await verifyResponse.json()
+    if (!userData?.user?.id) {
+      return NextResponse.json({ error: 'Invalid API key' }, { status: 401 })
     }
+
+    // Generate a JWT for this user so the admin panel recognizes them
+    const secret = process.env.PAYLOAD_SECRET || 'dev-secret'
+    const token = jwt.sign(
+      {
+        id: userData.user.id,
+        email: userData.user.email,
+        collection: 'users',
+      },
+      secret,
+      { expiresIn: '7d' }
+    )
 
     // Redirect to admin with auth cookie set
     const response = NextResponse.redirect(new URL('/admin', req.url))
-    response.cookies.set('payload-token', loginResult.token, {
+    response.cookies.set('payload-token', token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
