@@ -49,6 +49,9 @@ export const PrayerRequests: CollectionConfig = {
 
 export const Testimonies: CollectionConfig = {
   slug: 'testimonies',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Engagement',
     description: 'Collect and approve testimonies to share on your site.',
@@ -91,6 +94,9 @@ export const Testimonies: CollectionConfig = {
 
 export const Resources: CollectionConfig = {
   slug: 'resources',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Engagement',
     description: 'Share downloadable resources like Bible studies and guides.',
@@ -140,6 +146,9 @@ export const Resources: CollectionConfig = {
 
 export const VolunteerRoles: CollectionConfig = {
   slug: 'volunteer-roles',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Engagement',
     description: 'List volunteer opportunities for your church.',
@@ -174,6 +183,9 @@ export const VolunteerRoles: CollectionConfig = {
 
 export const GivingFunds: CollectionConfig = {
   slug: 'giving-funds',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Engagement',
     description: 'Set up designated giving funds for your church.',

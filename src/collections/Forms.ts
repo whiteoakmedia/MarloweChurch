@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Forms: CollectionConfig = {
   slug: 'forms',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Forms',
     description: 'Create custom forms for signups, surveys, and contact.',
@@ -81,6 +84,9 @@ export const Forms: CollectionConfig = {
 
 export const FormSubmissions: CollectionConfig = {
   slug: 'form-submissions',
+  access: {
+    create: () => true,
+  },
   admin: {
     group: 'Forms',
     description: 'View responses submitted through your forms.',

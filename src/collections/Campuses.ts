@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Campuses: CollectionConfig = {
   slug: 'campuses',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Church',
     description: 'Manage your church locations and campus details.',

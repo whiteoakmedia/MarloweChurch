@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Staff: CollectionConfig = {
   slug: 'staff',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Church',
     description: 'Add and manage your pastoral team and staff members.',

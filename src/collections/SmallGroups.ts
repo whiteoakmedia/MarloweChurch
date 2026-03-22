@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const SmallGroups: CollectionConfig = {
   slug: 'small-groups',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Church',
     description: 'Manage small group listings with meeting times and locations.',
@@ -100,6 +103,18 @@ export const SmallGroups: CollectionConfig = {
       admin: {
         position: 'sidebar',
       },
+    },
+    // PCO sync metadata (hidden from UI)
+    {
+      name: '_pcoSync',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { hidden: true },
+    },
+    {
+      name: '_pcoGroupId',
+      type: 'text',
+      admin: { hidden: true },
     },
   ],
 }

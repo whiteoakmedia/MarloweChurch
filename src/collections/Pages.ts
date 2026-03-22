@@ -15,6 +15,9 @@ import { FAQBlock } from '../blocks/FAQBlock'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Advanced',
     description: 'Build and edit the pages on your website using drag-and-drop sections.',

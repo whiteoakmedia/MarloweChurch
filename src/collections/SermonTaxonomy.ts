@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const SermonSeries: CollectionConfig = {
   slug: 'sermon-series',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Church',
     description: 'Group your sermons into series for easy browsing.',
@@ -37,6 +40,9 @@ export const SermonSeries: CollectionConfig = {
 
 export const SermonTopics: CollectionConfig = {
   slug: 'sermon-topics',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Church',
     description: 'Tag sermons by topic so visitors can find what they need.',

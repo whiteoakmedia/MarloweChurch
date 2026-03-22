@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Sermons: CollectionConfig = {
   slug: 'sermons',
+  access: {
+    read: () => true,
+  },
   admin: {
     group: 'Church',
     description: 'Upload and organize sermons with video links and scripture.',
