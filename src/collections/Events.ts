@@ -149,5 +149,10 @@ export const Events: CollectionConfig = {
       type: 'text',
       admin: { hidden: true },
     },
+    {
+      name: '_pcoimageurl',
+      type: 'text',
+      admin: { hidden: true },
+    },
   ],
 }

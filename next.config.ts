@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.prod.website-files.com" },
       { protocol: "http", hostname: "localhost" },
       { protocol: "https", hostname: "**.vercel.app" },
+      { protocol: "https", hostname: "assets.planningcenteronline.com" },
+      { protocol: "https", hostname: "people.planningcenteronline.com" },
     ],
   },
   async redirects() {

@@ -325,15 +325,20 @@ export default async function Home() {
           </div>
           {topEvents.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {topEvents.map((event: any) => (
+              {topEvents.map((event: any) => {
+                const imageUrl =
+                  typeof event.image === 'object' && event.image?.url
+                    ? event.image.url
+                    : event._pcoimageurl ?? null;
+                return (
                 <div
                   key={event.id}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
                 >
-                  {(typeof event.image === 'object' && event.image?.url) ? (
+                  {imageUrl ? (
                     <div className="relative h-44 overflow-hidden">
                       <Image
-                        src={event.image.url}
+                        src={imageUrl}
                         alt={event.title}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -375,7 +380,8 @@ export default async function Home() {
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="bg-white/10 rounded-2xl p-10 text-center backdrop-blur-sm">

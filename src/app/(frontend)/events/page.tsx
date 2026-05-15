@@ -51,16 +51,21 @@ export default async function EventsPage() {
           {/* Events Grid */}
           {events && events.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {events.map((event) => (
+              {events.map((event) => {
+                const imageUrl =
+                  typeof event.image === 'object' && event.image?.url
+                    ? event.image.url
+                    : (event as any)._pcoimageurl ?? null;
+                return (
                 <div
                   key={event.id}
                   className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col"
                 >
                   {/* Image or accent bar */}
-                  {(typeof event.image === 'object' && event.image?.url) ? (
+                  {imageUrl ? (
                     <div className="relative h-48 overflow-hidden">
                       <Image
-                        src={event.image.url}
+                        src={imageUrl}
                         alt={event.title}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -121,7 +126,8 @@ export default async function EventsPage() {
                     )}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-16">
