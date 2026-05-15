@@ -14,5 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/events`, lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/sermons`, lastModified, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/royal-rangers-girls-ministries`, lastModified, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/contact`, lastModified, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/privacy-policy`, lastModified, changeFrequency: "yearly", priority: 0.3 },
   ];
 }

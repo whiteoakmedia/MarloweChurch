@@ -18,15 +18,18 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://marloweag.org"),
   title: {
     template: "%s | Marlowe Assembly of God",
-    default: "Marlowe Assembly of God | Love God, Love People, Live with Purpose",
+    default: "Marlowe Assembly of God | Falling Waters, WV",
   },
   description:
     "Marlowe Assembly of God - A church where faith is real, community is strong, and lives are transformed. Located in Falling Waters, WV.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: "Marlowe Assembly of God",
-    title: "Marlowe Assembly of God | Love God, Love People, Live with Purpose",
+    title: "Marlowe Assembly of God | Falling Waters, WV",
     description:
       "A church where faith is real, community is strong, and lives are transformed. Located in Falling Waters, WV.",
     images: [{ url: "/images/Church-Web-Graphi.jpg", width: 1200, height: 630, alt: "Marlowe Assembly of God" }],
@@ -64,8 +67,10 @@ export default function FrontendLayout({
             gtag('config', 'G-CM8X3XY2QS');
           `}
         </Script>
-        <script
+        <Script
+          id="church-jsonld"
           type="application/ld+json"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",

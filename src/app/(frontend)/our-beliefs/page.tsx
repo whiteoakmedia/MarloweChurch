@@ -199,9 +199,9 @@ export default async function OurBeliefsPage() {
                     key={belief.title}
                     className="bg-church-cream rounded-2xl p-6 hover:shadow-lg transition-shadow"
                   >
-                    <h3 className="text-lg font-bold text-church-dark mb-3">
+                    <h2 className="text-lg font-bold text-church-dark mb-3">
                       {belief.title}
-                    </h3>
+                    </h2>
                     <p className="text-church-gray text-sm leading-relaxed mb-4">
                       {belief.description}
                     </p>

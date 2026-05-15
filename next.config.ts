@@ -12,12 +12,22 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
       { protocol: "https", hostname: "cdn.prod.website-files.com" },
       { protocol: "http", hostname: "localhost" },
       { protocol: "https", hostname: "**.vercel.app" },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/royal-rangers",
+        destination: "/royal-rangers-girls-ministries",
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return [
@@ -31,7 +41,19 @@ const nextConfig: NextConfig = {
           },
           {
             key: "X-Frame-Options",
-            value: "ALLOWALL",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
           },
         ],
       },

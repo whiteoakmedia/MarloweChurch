@@ -332,10 +332,12 @@ export default async function Home() {
                 >
                   {(typeof event.image === 'object' && event.image?.url) ? (
                     <div className="relative h-44 overflow-hidden">
-                      <img
+                      <Image
                         src={event.image.url}
                         alt={event.title}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover"
                       />
                     </div>
                   ) : (
